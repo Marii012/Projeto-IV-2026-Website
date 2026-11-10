@@ -1,0 +1,6 @@
+{% extends 'laboratorio/base.html' %}
+{% load static %}
+{% block title %}Entrar | Laboratório Catarina Domingos{% endblock %}
+{% block content %}
+<main class="auth-page"><a href="{% url 'home' %}" class="auth-back">← Voltar ao site</a><div class="auth-card"><img src="{% static 'laboratorio/img/logo-principal.png' %}" alt="Laboratório Catarina Domingos" class="auth-logo"><p class="eyebrow text-center">Área reservada</p><h1>Bem-vindo de volta.</h1><p class="auth-subtitle">Entre na sua conta para acompanhar os seus trabalhos.</p><form method="post">{% csrf_token %}<label for="username">Utilizador</label><input class="form-control" id="username" name="username" autocomplete="username" required><label for="password" class="mt-3">Palavra-passe</label><input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required><button class="btn btn-gold w-100 mt-4" type="submit">Entrar <span>↗</span></button></form></div></main>
+{% endblock %}
