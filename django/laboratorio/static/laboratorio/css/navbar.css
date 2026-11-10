@@ -1,0 +1,47 @@
+/* ========================================
+   NAVBAR
+======================================== */
+
+.site-nav {
+    height: 82px;
+    background: rgba(10, 10, 10, .88);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+
+.nav-inner {
+    height: 100%;
+}
+
+.brand-logo {
+    width: 178px;
+    height: auto;
+}
+
+.site-nav .nav-link {
+    color: #D8D0C5 !important;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.site-nav .nav-link:hover {
+    color: var(--gold) !important;
+}
+
+.btn-outline-gold {
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 0;
+    color: #fff;
+    padding: 11px 22px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.btn-outline-gold:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}

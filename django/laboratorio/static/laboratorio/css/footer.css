@@ -1,0 +1,35 @@
+/* ========================================
+   FOOTER
+======================================== */
+
+.site-footer {
+    background: #101010;
+    border-top: 1px solid rgba(201, 168, 76, .2);
+    padding: 32px 0;
+}
+
+.footer-logo {
+    width: 155px;
+    height: auto;
+}
+
+.site-footer p {
+    margin: 0;
+    color: #817A72;
+    font-size: 11px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 22px;
+}
+
+.footer-links a {
+    color: #817A72;
+    text-decoration: none;
+    font-size: 11px;
+}
+
+.footer-links a:hover {
+    color: var(--gold);
+}

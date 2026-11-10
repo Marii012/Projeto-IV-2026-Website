@@ -1,1 +1,573 @@
-:root{--gold:#C9A84C;--gold-light:#E2C87A;--gold-dark:#9A7A32;--obsidian:#0A0A0A;--cream:#F7F6F3;--ink:#171615;--muted:#625C55}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:80px}body{margin:0;background:var(--obsidian);color:#F5F0E8;font-family:'Outfit',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}.font-display,h1,h2,h3{font-family:'Playfair Display',serif}.site-nav{height:82px;background:rgba(10,10,10,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07)}.nav-inner{height:100%}.brand-logo{width:178px;height:auto}.site-nav .nav-link{color:#D8D0C5!important;font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.site-nav .nav-link:hover{color:var(--gold)!important}.btn-outline-gold{border:1px solid rgba(255,255,255,.35);border-radius:0;color:#fff;padding:11px 22px;font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}.btn-outline-gold:hover{border-color:var(--gold);color:var(--gold)}.hero-section{position:relative;min-height:780px;height:100vh;max-height:1050px;display:flex;align-items:center;overflow:hidden;background:#090a0a;padding-top:82px}.hero-image{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1660300110427-c4a6efdf18b5?auto=format&fit=crop&w=1800&q=85');background-size:cover;background-position:65% center}.hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,#080909 0%,rgba(8,9,9,.91) 43%,rgba(8,9,9,.18) 100%),linear-gradient(0deg,rgba(8,9,9,.72),transparent 60%)}.hero-content{position:relative;z-index:1;padding-top:50px;padding-bottom:70px}.eyebrow,.section-kicker{color:var(--gold);font-size:10px;font-weight:600;letter-spacing:.3em;text-transform:uppercase}.hero-content h1{font-size:clamp(4rem,8vw,7.5rem);line-height:.98;font-weight:400;color:#F7F4EE;margin:28px 0 32px}.hero-content h1 em,.display-heading em,.contact-heading em{color:var(--gold);font-weight:400}.hero-description{max-width:390px;color:#C8C0B5;font-size:14px;line-height:1.9}.scroll-cue{position:absolute;z-index:2;bottom:30px;left:50%;color:var(--gold);font-size:25px;text-decoration:none}.light-section{background:var(--cream);color:var(--ink)}.section-lab{padding:125px 0 110px}.section-kicker{color:var(--gold-dark);display:flex;align-items:center;gap:15px}.section-kicker span{width:32px;height:1px;background:var(--gold)}.display-heading{font-size:clamp(2.7rem,5.8vw,5.3rem);line-height:1.07;font-weight:400;letter-spacing:-.035em}.display-heading em{color:#B28D38}.gold-rule{height:1px;background:rgba(201,168,76,.45)}.body-copy{font-size:14px;line-height:1.95;color:var(--muted)}.services-section{padding:35px 0 130px}.service-list{border-top:1px solid rgba(201,168,76,.3)}.service-row{display:grid;grid-template-columns:30px 1fr 28px;gap:18px;align-items:start;padding:24px 0;border-bottom:1px solid rgba(201,168,76,.3)}.service-symbol{color:#B28D38;font-size:23px}.service-row h3{font-size:25px;font-weight:400;margin:0 0 5px}.service-row p{font-size:12px;line-height:1.7;color:#746D65;margin:0}.service-row small{color:var(--gold-dark);font-family:monospace;padding-top:6px}.lab-photo-wrap{position:relative;padding:0 0 18px 18px}.lab-photo-wrap:before{content:'';position:absolute;left:0;bottom:0;width:115px;height:115px;border:1px solid var(--gold);z-index:0}.lab-photo{position:relative;z-index:1;width:100%;height:550px;object-fit:cover}.contact-section{background:#101010;padding:115px 0 125px}.contact-heading{font-size:clamp(3rem,5.7vw,5.6rem);line-height:1.04;font-weight:400;color:#F7F4EE}.contact-intro{max-width:420px;margin-top:30px;color:#C8C0B5;font-size:14px;line-height:1.9}.contact-rule{width:80px;margin-top:45px;background:var(--gold)}.form-heading{font-size:26px;font-weight:400;color:#F7F4EE;margin-bottom:30px}.contact-form label,.auth-card label{display:block;color:#E8E1D8;font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}.contact-form .form-control,.auth-card .form-control{border:0;border-bottom:1px solid rgba(201,168,76,.4);border-radius:0;background:transparent;color:#F7F4EE;padding:12px 0;font-size:14px;box-shadow:none}.contact-form .form-control:focus,.auth-card .form-control:focus{border-color:var(--gold);background:transparent;color:#fff}.contact-form textarea{resize:vertical}.contact-form textarea::placeholder{color:#615B54}.btn-gold{display:inline-flex;justify-content:space-between;align-items:center;gap:30px;background:var(--gold);border:0;border-radius:0;color:#0A0A0A;padding:15px 22px;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}.btn-gold:hover{background:var(--gold-light);color:#0A0A0A}.site-footer{background:#101010;border-top:1px solid rgba(201,168,76,.2);padding:32px 0}.footer-logo{width:155px;height:auto}.site-footer p{margin:0;color:#817A72;font-size:11px}.footer-links{display:flex;gap:22px}.footer-links a{color:#817A72;text-decoration:none;font-size:11px}.footer-links a:hover{color:var(--gold)}.message-stack{position:fixed;z-index:1100;top:95px;left:0;right:0}.auth-page{min-height:100vh;background:radial-gradient(ellipse at 50% 20%,#242018 0%,#0A0A0A 55%);display:flex;align-items:center;justify-content:center;padding:70px 20px;position:relative}.auth-back{position:absolute;top:35px;left:5%;color:#C8C0B5;text-decoration:none;font-size:12px}.auth-card{width:min(100%,440px);padding:45px;background:#141414;border:1px solid rgba(201,168,76,.25)}.auth-logo{display:block;width:125px;height:125px;object-fit:contain;margin:0 auto 20px}.auth-card h1{text-align:center;font-size:38px;font-weight:400}.auth-subtitle{text-align:center;color:#A8A096;font-size:13px;margin:12px 0 35px}.auth-card .eyebrow{margin-bottom:12px}.auth-card form{margin-top:20px}.dashboard-page{min-height:100vh;background:#0d0d0d}.dashboard-nav{background:#050505;border-bottom:1px solid rgba(201,168,76,.25);padding:18px 28px}.dashboard-nav .navbar-brand{font-size:16px;letter-spacing:.15em;color:var(--gold)}.dashboard-nav .navbar-brand span{color:#aaa;font-size:11px}.dashboard-title{font-size:48px;color:#F7F4EE}.dashboard-stat{padding:25px;background:#171717;border:1px solid rgba(201,168,76,.2);min-height:120px}.dashboard-stat span{display:block;color:#aaa;font-size:12px}.dashboard-stat strong{display:block;color:var(--gold);font-size:25px;margin-top:12px}.alert-dark{background:#171717;border:1px solid rgba(201,168,76,.2);color:#c8c0b5}@media(max-width:767.98px){.site-nav{height:auto;min-height:72px}.brand-logo{width:145px}.hero-section{min-height:760px;height:auto}.hero-image{background-position:62% center}.hero-shade{background:linear-gradient(90deg,rgba(8,9,9,.95),rgba(8,9,9,.6)),linear-gradient(0deg,rgba(8,9,9,.7),transparent)}.hero-content h1{font-size:clamp(3.8rem,16vw,5.2rem)}.section-lab{padding:85px 0}.services-section{padding:25px 0 85px}.lab-photo{height:390px}.contact-section{padding:85px 0}.auth-card{padding:30px 22px}.footer-logo{width:135px}}
+
+/* ========================================
+   VARIÁVEIS GLOBAIS
+======================================== */
+
+:root {
+    --gold: #C9A84C;
+    --gold-light: #E2C87A;
+    --gold-dark: #9A7A32;
+
+    --obsidian: #0A0A0A;
+    --cream: #F7F6F3;
+    --ink: #171615;
+    --muted: #625C55;
+}
+
+
+/* ========================================
+   RESET E ESTILOS GERAIS
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+}
+
+body {
+    margin: 0;
+    background: var(--obsidian);
+    color: #F5F0E8;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+}
+
+.font-display,
+h1,
+h2,
+h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* ========================================
+   HERO SECTION
+======================================== */
+
+.hero-section {
+    position: relative;
+    min-height: 780px;
+    height: 100vh;
+    max-height: 1050px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #090a0a;
+    padding-top: 82px;
+}
+
+.hero-image {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1660300110427-c4a6efdf18b5?auto=format&fit=crop&w=1800&q=85');
+    background-size: cover;
+    background-position: 65% center;
+}
+
+.hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(
+            90deg,
+            #080909 0%,
+            rgba(8, 9, 9, .91) 43%,
+            rgba(8, 9, 9, .18) 100%
+        ),
+        linear-gradient(
+            0deg,
+            rgba(8, 9, 9, .72),
+            transparent 60%
+        );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    padding-top: 50px;
+    padding-bottom: 70px;
+}
+
+.eyebrow,
+.section-kicker {
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+}
+
+.hero-content h1 {
+    font-size: clamp(4rem, 8vw, 7.5rem);
+    line-height: .98;
+    font-weight: 400;
+    color: #F7F4EE;
+    margin: 28px 0 32px;
+}
+
+.hero-content h1 em,
+.display-heading em,
+.contact-heading em {
+    color: var(--gold);
+    font-weight: 400;
+}
+
+.hero-description {
+    max-width: 390px;
+    color: #C8C0B5;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.scroll-cue {
+    position: absolute;
+    z-index: 2;
+    bottom: 30px;
+    left: 50%;
+    color: var(--gold);
+    font-size: 25px;
+    text-decoration: none;
+}
+
+
+/* ========================================
+   SECÇÃO LABORATÓRIO
+======================================== */
+
+.light-section {
+    background: var(--cream);
+    color: var(--ink);
+}
+
+.section-lab {
+    padding: 125px 0 110px;
+}
+
+.section-kicker {
+    color: var(--gold-dark);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.section-kicker span {
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+}
+
+.display-heading {
+    font-size: clamp(2.7rem, 5.8vw, 5.3rem);
+    line-height: 1.07;
+    font-weight: 400;
+    letter-spacing: -.035em;
+}
+
+.display-heading em {
+    color: #B28D38;
+}
+
+.gold-rule {
+    height: 1px;
+    background: rgba(201, 168, 76, .45);
+}
+
+.body-copy {
+    font-size: 14px;
+    line-height: 1.95;
+    color: var(--muted);
+}
+
+
+/* ========================================
+   SECÇÃO SERVIÇOS
+======================================== */
+
+.services-section {
+    padding: 35px 0 130px;
+}
+
+.service-list {
+    border-top: 1px solid rgba(201, 168, 76, .3);
+}
+
+.service-row {
+    display: grid;
+    grid-template-columns: 30px 1fr 28px;
+    gap: 18px;
+    align-items: start;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(201, 168, 76, .3);
+}
+
+.service-symbol {
+    color: #B28D38;
+    font-size: 23px;
+}
+
+.service-row h3 {
+    font-size: 25px;
+    font-weight: 400;
+    margin: 0 0 5px;
+}
+
+.service-row p {
+    font-size: 12px;
+    line-height: 1.7;
+    color: #746D65;
+    margin: 0;
+}
+
+.service-row small {
+    color: var(--gold-dark);
+    font-family: monospace;
+    padding-top: 6px;
+}
+
+.lab-photo-wrap {
+    position: relative;
+    padding: 0 0 18px 18px;
+}
+
+.lab-photo-wrap:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 115px;
+    height: 115px;
+    border: 1px solid var(--gold);
+    z-index: 0;
+}
+
+.lab-photo {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 550px;
+    object-fit: cover;
+}
+
+
+/* ========================================
+   SECÇÃO CONTACTOS
+======================================== */
+
+.contact-section {
+    background: #101010;
+    padding: 115px 0 125px;
+}
+
+.contact-heading {
+    font-size: clamp(3rem, 5.7vw, 5.6rem);
+    line-height: 1.04;
+    font-weight: 400;
+    color: #F7F4EE;
+}
+
+.contact-intro {
+    max-width: 420px;
+    margin-top: 30px;
+    color: #C8C0B5;
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.contact-rule {
+    width: 80px;
+    margin-top: 45px;
+    background: var(--gold);
+}
+
+.form-heading {
+    font-size: 26px;
+    font-weight: 400;
+    color: #F7F4EE;
+    margin-bottom: 30px;
+}
+
+.contact-form label,
+.auth-card label {
+    display: block;
+    color: #E8E1D8;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.contact-form .form-control,
+.auth-card .form-control {
+    border: 0;
+    border-bottom: 1px solid rgba(201, 168, 76, .4);
+    border-radius: 0;
+    background: transparent;
+    color: #F7F4EE;
+    padding: 12px 0;
+    font-size: 14px;
+    box-shadow: none;
+}
+
+.contact-form .form-control:focus,
+.auth-card .form-control:focus {
+    border-color: var(--gold);
+    background: transparent;
+    color: #fff;
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-form textarea::placeholder {
+    color: #615B54;
+}
+
+.btn-gold {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    background: var(--gold);
+    border: 0;
+    border-radius: 0;
+    color: #0A0A0A;
+    padding: 15px 22px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.btn-gold:hover {
+    background: var(--gold-light);
+    color: #0A0A0A;
+}
+
+/* ========================================
+   MENSAGENS DJANGO
+======================================== */
+
+.message-stack {
+    position: fixed;
+    z-index: 1100;
+    top: 95px;
+    left: 0;
+    right: 0;
+}
+
+
+/* ========================================
+   PÁGINA DE AUTENTICAÇÃO
+======================================== */
+
+.auth-page {
+    min-height: 100vh;
+    background: radial-gradient(
+        ellipse at 50% 20%,
+        #242018 0%,
+        #0A0A0A 55%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 20px;
+    position: relative;
+}
+
+.auth-back {
+    position: absolute;
+    top: 35px;
+    left: 5%;
+    color: #C8C0B5;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.auth-card {
+    width: min(100%, 440px);
+    padding: 45px;
+    background: #141414;
+    border: 1px solid rgba(201, 168, 76, .25);
+}
+
+.auth-logo {
+    display: block;
+    width: 125px;
+    height: 125px;
+    object-fit: contain;
+    margin: 0 auto 20px;
+}
+
+.auth-card h1 {
+    text-align: center;
+    font-size: 38px;
+    font-weight: 400;
+}
+
+.auth-subtitle {
+    text-align: center;
+    color: #A8A096;
+    font-size: 13px;
+    margin: 12px 0 35px;
+}
+
+.auth-card .eyebrow {
+    margin-bottom: 12px;
+}
+
+.auth-card form {
+    margin-top: 20px;
+}
+
+
+/* ========================================
+   DASHBOARD
+======================================== */
+
+.dashboard-page {
+    min-height: 100vh;
+    background: #0d0d0d;
+}
+
+.dashboard-nav {
+    background: #050505;
+    border-bottom: 1px solid rgba(201, 168, 76, .25);
+    padding: 18px 28px;
+}
+
+.dashboard-nav .navbar-brand {
+    font-size: 16px;
+    letter-spacing: .15em;
+    color: var(--gold);
+}
+
+.dashboard-nav .navbar-brand span {
+    color: #aaa;
+    font-size: 11px;
+}
+
+.dashboard-title {
+    font-size: 48px;
+    color: #F7F4EE;
+}
+
+.dashboard-stat {
+    padding: 25px;
+    background: #171717;
+    border: 1px solid rgba(201, 168, 76, .2);
+    min-height: 120px;
+}
+
+.dashboard-stat span {
+    display: block;
+    color: #aaa;
+    font-size: 12px;
+}
+
+.dashboard-stat strong {
+    display: block;
+    color: var(--gold);
+    font-size: 25px;
+    margin-top: 12px;
+}
+
+.alert-dark {
+    background: #171717;
+    border: 1px solid rgba(201, 168, 76, .2);
+    color: #c8c0b5;
+}
+
+
+/* ========================================
+   RESPONSIVIDADE
+======================================== */
+
+@media (max-width: 767.98px) {
+
+    /* Navbar */
+
+    .site-nav {
+        height: auto;
+        min-height: 72px;
+    }
+
+    .brand-logo {
+        width: 145px;
+    }
+
+
+    /* Hero */
+
+    .hero-section {
+        min-height: 760px;
+        height: auto;
+    }
+
+    .hero-image {
+        background-position: 62% center;
+    }
+
+    .hero-shade {
+        background:
+            linear-gradient(
+                90deg,
+                rgba(8, 9, 9, .95),
+                rgba(8, 9, 9, .6)
+            ),
+            linear-gradient(
+                0deg,
+                rgba(8, 9, 9, .7),
+                transparent
+            );
+    }
+
+    .hero-content h1 {
+        font-size: clamp(3.8rem, 16vw, 5.2rem);
+    }
+
+
+    /* Laboratório */
+
+    .section-lab {
+        padding: 85px 0;
+    }
+
+
+    /* Serviços */
+
+    .services-section {
+        padding: 25px 0 85px;
+    }
+
+    .lab-photo {
+        height: 390px;
+    }
+
+
+    /* Contactos */
+
+    .contact-section {
+        padding: 85px 0;
+    }
+
+
+    /* Autenticação */
+
+    .auth-card {
+        padding: 30px 22px;
+    }
+
+
+    /* Footer */
+
+    .footer-logo {
+        width: 135px;
+    }
+
+}

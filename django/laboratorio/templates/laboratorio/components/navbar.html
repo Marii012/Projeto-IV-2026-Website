@@ -1,0 +1,61 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark site-nav fixed-top">
+
+    <div class="container-xl nav-inner">
+
+        <a class="navbar-brand" href="#topo">
+            <img
+                src="{% static 'laboratorio/img/logo-horizontal.png' %}"
+                alt="Laboratório Catarina Domingos"
+                class="brand-logo"
+            >
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#menuPrincipal"
+            aria-controls="menuPrincipal"
+            aria-expanded="false"
+            aria-label="Abrir menu"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#laboratorio">
+                        Laboratório
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#servicos">
+                        Serviços
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#contactos">
+                        Contactos
+                    </a>
+                </li>
+
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-outline-gold" href="{% url 'entrar' %}">
+                        Entrar
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
