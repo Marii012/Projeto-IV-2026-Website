@@ -571,3 +571,15 @@ h3 {
     }
 
 }
+
+/* Fade da seta ao fazer scroll */
+
+.scroll-cue {
+    opacity: 1;
+    transition: opacity .5s ease;
+}
+
+.scroll-cue.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
