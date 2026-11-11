@@ -1,9 +1,11 @@
+
 {% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-dark site-nav fixed-top">
 
     <div class="container-xl nav-inner">
 
+        <!-- LOGÓTIPO -->
         <a class="navbar-brand" href="#topo">
             <img
                 src="{% static 'laboratorio/img/logo-horizontal.png' %}"
@@ -12,6 +14,7 @@
             >
         </a>
 
+        <!-- BOTÃO MOBILE -->
         <button
             class="navbar-toggler"
             type="button"
@@ -24,9 +27,10 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- MENU -->
         <div class="collapse navbar-collapse" id="menuPrincipal">
 
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
+            <ul class="navbar-nav nav-links gap-lg-4">
 
                 <li class="nav-item">
                     <a class="nav-link" href="#laboratorio">
@@ -46,13 +50,12 @@
                     </a>
                 </li>
 
-                <li class="nav-item ms-lg-3">
-                    <a class="btn btn-outline-gold" href="{% url 'entrar' %}">
-                        Entrar
-                    </a>
-                </li>
-
             </ul>
+
+            <!-- BOTÃO ENTRAR -->
+            <a class="btn btn-outline-gold nav-button" href="{% url 'entrar' %}">
+                Entrar
+            </a>
 
         </div>
 

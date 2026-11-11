@@ -1,3 +1,4 @@
+
 /* ========================================
    NAVBAR
 ======================================== */
@@ -11,11 +12,35 @@
 
 .nav-inner {
     height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
+
+/* LOGÓTIPO */
 
 .brand-logo {
     width: 178px;
     height: auto;
+}
+
+/* LINKS */
+
+.site-nav .navbar-collapse {
+    flex-grow: 1;
+    height: 100%;
+    align-items: center;
+}
+
+.site-nav .nav-links {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
 }
 
 .site-nav .nav-link {
@@ -29,6 +54,8 @@
 .site-nav .nav-link:hover {
     color: var(--gold) !important;
 }
+
+/* BOTÃO ENTRAR */
 
 .btn-outline-gold {
     border: 1px solid rgba(255, 255, 255, .35);
@@ -44,4 +71,50 @@
 .btn-outline-gold:hover {
     border-color: var(--gold);
     color: var(--gold);
+}
+
+.nav-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ========================================
+   RESPONSIVO
+======================================== */
+
+@media (max-width: 991.98px) {
+
+    .site-nav {
+        height: auto;
+        min-height: 82px;
+    }
+
+    .nav-inner {
+        min-height: 82px;
+    }
+
+    .site-nav .navbar-collapse {
+        height: auto;
+        padding: 15px 0 20px;
+        text-align: center;
+    }
+
+    .site-nav .nav-links {
+        position: static;
+        transform: none;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+        margin: 0;
+    }
+
+    .nav-button {
+        position: static;
+        display: inline-block;
+        transform: none;
+        margin-top: 15px;
+    }
+
 }
