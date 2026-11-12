@@ -295,3 +295,69 @@
     font-weight: 600;
     text-decoration: none;
 }
+
+/* ========================================
+   MENSAGENS
+======================================== */
+
+.login-messages {
+    margin-bottom: 24px;
+}
+
+.login-alert {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    animation: alertFade 0.35s ease;
+}
+
+.login-alert p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.login-alert.error {
+    background: rgba(190, 65, 65, 0.10);
+    border: 1px solid rgba(190, 65, 65, 0.3);
+    color: #E58B8B;
+}
+
+.login-alert.success {
+    background: rgba(80, 150, 100, 0.10);
+    border: 1px solid rgba(80, 150, 100, 0.3);
+    color: #8BC99A;
+}
+
+.login-alert.warning {
+    background: rgba(201, 168, 76, 0.10);
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    color: #D9BD70;
+}
+
+.alert-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+@keyframes alertFade {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

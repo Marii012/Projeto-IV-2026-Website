@@ -48,42 +48,16 @@
 </head>
 
 <body>
-
-    <!-- Mensagens Django -->
-    {% if messages %}
-
-        <div class="message-stack container">
-
-            {% for message in messages %}
-
-                <div
-                    class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show"
-                    role="alert"
-                >
-                    {{ message }}
-
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert"
-                        aria-label="Fechar"
-                    ></button>
-
-                </div>
-
-            {% endfor %}
-
-        </div>
-
-    {% endif %}
-
     <!-- Conteúdo das páginas -->
     {% block content %}{% endblock %}
 
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    {% block extra_js %}{% endblock %}
+    <!-- Ficheiros JavaScript -->
+    <script src="{% static 'laboratorio/js/navbar.js' %}"></script>
+
+    <script src="{% static 'laboratorio/js/scroll.js' %}"></script>
 
     <!-- Animate On Scroll -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -96,9 +70,7 @@
         });
     </script>
 
-    <!-- Ficheiros JavaScript -->
-    <script src="{% static 'laboratorio/js/navbar.js' %}"></script>
-    <script src="{% static 'laboratorio/js/scroll.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 
 </body>
 
