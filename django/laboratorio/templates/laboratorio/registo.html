@@ -1,0 +1,152 @@
+{% extends 'laboratorio/base.html' %}
+{% load static %}
+
+{% block title %}Criar Conta | Laboratório Catarina Domingos{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'laboratorio/css/registo.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<main class="login-page">
+
+    <!-- PAINEL ESQUERDO -->
+    <section class="login-visual">
+
+        <div class="login-visual-overlay"></div>
+
+        <div class="login-visual-content">
+
+            <a href="{% url 'home' %}" class="login-brand">
+                <img
+                    src="{% static 'laboratorio/img/logo-horizontal.png' %}"
+                    alt="Laboratório Catarina Domingos"
+                >
+            </a>
+
+            <div class="login-visual-bottom">
+
+                <blockquote>
+                    "O primeiro passo para
+                    <br>
+                    trabalharmos em conjunto."
+                </blockquote>
+
+                <div class="login-divider"></div>
+
+                <p>Registo reservado a clientes do laboratório</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PAINEL DIREITO -->
+    <section class="login-content">
+
+        <!-- LOGÓTIPO MOBILE -->
+        <div class="login-mobile-logo">
+            <a href="{% url 'home' %}">
+                <img
+                    src="{% static 'laboratorio/img/logo-horizontal.png' %}"
+                    alt="Laboratório Catarina Domingos"
+                >
+            </a>
+        </div>
+
+        <div class="login-form-wrapper">
+
+            <p class="login-eyebrow">Portal de clientes</p>
+
+            <h1>Criar conta</h1>
+
+            <p class="login-subtitle">
+                Preencha os dados da clínica. O acesso será ativado após aprovação do administrador.
+            </p>
+
+            <div class="login-separator"></div>
+
+            <!-- FORMULÁRIO -->
+            <form method="post" class="login-form">
+
+                {% csrf_token %}
+
+                <div class="login-field">
+                    <label for="nome">Nome da clínica</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Nome da clínica"
+                        required
+                    >
+                </div>
+
+                <div class="login-row">
+                    <div class="login-field">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="geral@clinica.pt" required>
+                    </div>
+
+                    <div class="login-field">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="+351 000 000 000" required>
+                    </div>
+                </div>
+
+                <div class="login-field">
+                    <label for="nif">NIF</label>
+                    <input
+                        type="text"
+                        id="nif"
+                        name="nif"
+                        placeholder="000 000 000"
+                        required
+                    >
+                </div>
+
+                <div class="login-section-header">
+                    <label>Moradas</label>
+                    <button type="button" id="add-morada" class="login-action-btn">+ Adicionar morada</button>
+                </div>
+
+                <div id="moradas-container">
+                    <div class="login-field morada-item">
+                        <input type="text" name="morada[]" placeholder="Morada 1 — rua, código postal, localidade" required>
+                    </div>
+                </div>
+
+                <div class="login-row">
+                    <div class="login-field">
+                        <label for="password">Palavra-passe</label>
+                        <input type="password" id="password" name="password" placeholder="Mínimo 6 caracteres" minlength="6" autocomplete="new-password" required>
+                    </div>
+
+                    <div class="login-field">
+                        <label for="confirmar_password">Confirmar palavra-passe</label>
+                        <input type="password" id="confirmar_password" name="confirmar_password" placeholder="Repita a palavra-passe" minlength="6" autocomplete="new-password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-submit">
+                    Enviar pedido de conta
+                    <span>↗</span>
+                </button>
+
+            </form>
+
+            <p class="login-register-link">
+                Já tem uma conta?
+                <a href="{% url 'entrar' %}">Iniciar sessão</a>
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock %}

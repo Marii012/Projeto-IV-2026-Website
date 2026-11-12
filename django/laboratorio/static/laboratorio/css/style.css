@@ -1,4 +1,3 @@
-
 /* ========================================
    VARIÁVEIS GLOBAIS
 ======================================== */
@@ -26,6 +25,7 @@
 html {
     scroll-behavior: smooth;
     scroll-padding-top: 80px;
+    overflow-x: hidden;
 }
 
 body {
@@ -347,6 +347,12 @@ h3 {
 .btn-gold:hover {
     background: var(--gold-light);
     color: #0A0A0A;
+}
+
+#mensagem {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 280px;
 }
 
 /* ========================================

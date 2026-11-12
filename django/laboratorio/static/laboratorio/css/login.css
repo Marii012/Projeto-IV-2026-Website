@@ -1,0 +1,297 @@
+/* ========================================
+   LOGIN
+======================================== */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    background: #0A0A0A;
+    color: #F5F0E8;
+}
+
+/* ========================================
+   PAINEL ESQUERDO
+======================================== */
+
+.login-visual {
+    width: 50%;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+
+    background-image:
+        url('https://images.unsplash.com/photo-1639390159821-1cf308998c34?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=NHwxMjA3fDA%3D');
+
+    background-size: cover;
+    background-position: center;
+}
+
+.login-visual-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        135deg,
+        rgba(10, 10, 10, .80),
+        rgba(10, 10, 10, .60),
+        rgba(10, 10, 10, .40)
+    );
+}
+
+.login-visual-content {
+    position: relative;
+    z-index: 1;
+
+    min-height: 100vh;
+    padding: 48px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.login-brand img {
+    width: 200px;
+    height: auto;
+}
+
+.login-visual-bottom blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-style: italic;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    color: #F5F0E8;
+}
+
+.login-divider {
+    width: 48px;
+    height: 1px;
+    background: #C9A84C;
+    margin-bottom: 18px;
+}
+
+.login-visual-bottom p {
+    color: #A09080;
+    font-size: 13px;
+    font-weight: 300;
+    margin: 0;
+}
+
+
+/* ========================================
+   PAINEL DIREITO
+======================================== */
+
+.login-content {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    padding: 60px 80px;
+}
+
+.login-form-wrapper {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.login-eyebrow {
+    color: #C9A84C;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+
+.login-form-wrapper h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #F5F0E8;
+    margin-bottom: 10px;
+}
+
+.login-subtitle {
+    color: #A09080;
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 32px;
+}
+
+.login-separator {
+    width: 100%;
+    height: 1px;
+    background: rgba(201, 168, 76, .15);
+    margin-bottom: 32px;
+}
+
+
+/* ========================================
+   FORMULÁRIO
+======================================== */
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.login-field label {
+    color: #C9A84C;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+
+.login-field input {
+    width: 100%;
+    background: #1A1A1A;
+    border: 1px solid rgba(201, 168, 76, .20);
+
+    color: #F5F0E8;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+
+    padding: 14px 16px;
+
+    outline: none;
+    border-radius: 0;
+
+    transition: border-color .25s ease;
+}
+
+.login-field input::placeholder {
+    color: #625C55;
+}
+
+.login-field input:focus {
+    border-color: rgba(201, 168, 76, .65);
+}
+
+
+/* ========================================
+   BOTÃO ENTRAR
+======================================== */
+
+.login-submit {
+    width: 100%;
+    padding: 15px 20px;
+    margin-top: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #C9A84C;
+    border: 1px solid #C9A84C;
+
+    color: #0A0A0A;
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition: all .3s ease;
+}
+
+.login-submit:hover {
+    background: #E2C87A;
+    border-color: #E2C87A;
+}
+
+.login-submit span {
+    font-size: 16px;
+}
+
+/* ========================================
+   LOGÓTIPO MOBILE
+======================================== */
+
+.login-mobile-logo {
+    display: none;
+}
+
+
+/* ========================================
+   RESPONSIVO
+======================================== */
+
+@media (max-width: 991.98px) {
+
+    .login-visual {
+        display: none;
+    }
+
+    .login-content {
+        padding: 45px 35px;
+    }
+
+    .login-mobile-logo {
+        display: block;
+        position: absolute;
+        top: 35px;
+        left: 35px;
+    }
+
+    .login-mobile-logo img {
+        width: 178px;
+        height: auto;
+    }
+
+    .login-form-wrapper {
+        margin-top: 100px;
+    }
+
+}
+
+@media (max-width: 575.98px) {
+
+    .login-content {
+        padding: 35px 24px;
+    }
+
+    .login-mobile-logo {
+        top: 30px;
+        left: 24px;
+    }
+
+    .login-mobile-logo img {
+        width: 178px;
+    }
+
+    .login-form-wrapper {
+        margin-top: 90px;
+    }
+
+    .login-form-wrapper h1 {
+        font-size: 30px;
+    }
+
+}
+
+/* Criar Conta */
+.login-register-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.login-register-link a {
+    color: #C9A84C !important;
+    font-weight: 600;
+    text-decoration: none;
+}

@@ -1,0 +1,76 @@
+@import url("login.css");
+
+/* REGISTO */
+
+.login-page {
+    min-height: 100vh;
+    height: auto;
+}
+
+.login-content {
+    align-items: flex-start;
+    padding-top: 140px;
+    padding-bottom: 60px;
+}
+
+.login-form-wrapper {
+    max-width: 400px;
+}
+
+.login-form {
+    gap: 18px;
+}
+
+@media (max-width: 991.98px) {
+    .login-content {
+        padding-top: 140px;
+        padding-bottom: 45px;
+    }
+}
+
+/* Linha com dois elementos lado a lado */
+.login-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Cabeçalho de secção para alinhar rótulo e botão de ação */
+.login-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #d4af37;
+}
+
+.login-section-header label {
+    margin-bottom: 0 !important;
+}
+
+/* Estilo do botão de adicionar morada */
+.login-action-btn {
+    background: none;
+    border: none;
+    color: #d4af37; /* Ajusta para a cor dourada do teu tema */
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.login-action-btn:hover {
+    text-decoration: underline;
+}
+
+/* Espaçamento entre moradas dinâmicas */
+.morada-item {
+    margin-bottom: 12px;
+}
+
+/* Responsividade para ecrãs mais pequenos (telemóveis) */
+@media (max-width: 768px) {
+    .login-row {
+        grid-template-columns: 1fr;
+    }
+}

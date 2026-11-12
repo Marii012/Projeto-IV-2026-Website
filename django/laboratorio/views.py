@@ -34,9 +34,13 @@ def entrar(request):
         messages.error(request, 'Utilizador ou palavra-passe inválidos.')
     return render(request, 'laboratorio/login.html')
 
+def registo(request):
+    return render(request, 'laboratorio/registo.html')
 
 @login_required
 def dashboard(request):
     return render(request, 'laboratorio/dashboard.html', {
         'total_pedidos_contacto': PedidoContacto.objects.count(),
     })
+
+
