@@ -16,7 +16,7 @@ def home(request):
         )
         messages.success(request, 'Pedido enviado. Obrigado pelo contacto!')
         return redirect('home')
-    return render(request, 'laboratorio/home.html')
+    return render(request, 'laboratorio/public/home.html')
 
 
 def contacto(request):
@@ -32,10 +32,10 @@ def entrar(request):
             login(request, utilizador)
             return redirect('dashboard')
         messages.error(request, 'Utilizador ou palavra-passe inválidos.')
-    return render(request, 'laboratorio/login.html')
+    return render(request, 'laboratorio/auth/login.html')
 
 def registo(request):
-    return render(request, 'laboratorio/registo.html')
+    return render(request, 'laboratorio/auth/registo.html')
 
 @login_required
 def dashboard(request):
