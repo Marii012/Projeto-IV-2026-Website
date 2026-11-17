@@ -1,0 +1,108 @@
+
+{% extends 'laboratorio/dashboard/base_dashboard.html' %}
+
+{% block title %}Dashboard | Laboratório Catarina Domingos{% endblock %}
+
+{% block dashboard_content %}
+
+<header class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+    <div>
+        <p class="admin-kicker mb-2">Área de administração</p>
+
+        <h1 class="admin-heading mb-2">
+            Olá, {{ request.user.first_name|default:request.user.username }}
+        </h1>
+
+        <p class="admin-subtitle mb-0">
+            Aqui pode acompanhar a atividade do laboratório.
+        </p>
+    </div>
+
+    <div class="admin-date">
+        ◷ &nbsp; {% now "d/m/Y" %}
+    </div>
+
+</header>
+
+<section class="row g-3 mb-4" aria-label="Resumo do laboratório">
+
+    <div class="col-6 col-xl-3">
+        <article class="admin-stat">
+            <div class="admin-stat-icon">◎</div>
+            <div>
+                <p class="admin-stat-label">Utilizadores registados</p>
+                <p class="admin-stat-value">{{ total_utilizadores }}</p>
+            </div>
+        </article>
+    </div>
+
+    <div class="col-6 col-xl-3">
+        <article class="admin-stat">
+            <div class="admin-stat-icon">✧</div>
+            <div>
+                <p class="admin-stat-label">Acessos de equipa</p>
+                <p class="admin-stat-value">{{ total_administradores }}</p>
+            </div>
+        </article>
+    </div>
+
+</section>
+
+<div class="row g-4">
+
+    <div class="col-lg-8">
+        <section class="admin-panel">
+
+            <div class="admin-panel-head">
+                <h2 class="admin-panel-title">Bem-vindo ao painel</h2>
+                <p class="admin-panel-note">
+                    Gestão do Laboratório Catarina Domingos
+                </p>
+            </div>
+
+            <div class="admin-empty">
+                Selecione uma opção no menu lateral para começar.
+            </div>
+
+        </section>
+    </div>
+
+    <div class="col-lg-4">
+        <aside class="admin-panel">
+
+            <div class="admin-panel-head">
+                <h2 class="admin-panel-title">Acesso rápido</h2>
+                <p class="admin-panel-note">Gestão do laboratório</p>
+            </div>
+
+            <div class="admin-quick-list">
+
+                <a class="admin-quick-link" href="/admin/auth/user/">
+                    <span class="admin-quick-icon">◎</span>
+                    <span>
+                        <strong>Gerir utilizadores</strong>
+                        <small>Contas e permissões de acesso</small>
+                    </span>
+                </a>
+
+                <a class="admin-quick-link" href="/admin/">
+                    <span class="admin-quick-icon">⌘</span>
+                    <span>
+                        <strong>Administração Django</strong>
+                        <small>Área técnica do sistema</small>
+                    </span>
+                </a>
+
+            </div>
+
+        </aside>
+    </div>
+
+</div>
+
+<p class="admin-footer-note mt-4">
+    Laboratório Catarina Domingos · Painel de gestão
+</p>
+
+{% endblock %}

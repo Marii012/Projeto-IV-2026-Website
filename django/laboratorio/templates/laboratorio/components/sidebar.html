@@ -1,0 +1,62 @@
+{% load static %}
+
+<aside class="admin-sidebar">
+
+    <div class="admin-brand">
+        <a href="{% url 'dashboard_admin' %}">
+            <img
+                src="{% static 'laboratorio/img/logo-horizontal.png' %}"
+                alt="Laboratório Catarina Domingos"
+            >
+        </a>
+    </div>
+
+    <nav class="admin-nav nav flex-column" aria-label="Menu principal">
+
+        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard_admin' %}active{% endif %}"
+           href="{% url 'dashboard_admin' %}">
+            <span class="nav-icon">◉</span>
+            Dashboard
+        </a>
+
+        <a class="nav-link" href="/admin/auth/user/">
+            <span class="nav-icon">◎</span>
+            Utilizadores
+        </a>
+
+        <a class="nav-link" href="/admin/">
+            <span class="nav-icon">⌘</span>
+            Administração Django
+        </a>
+
+    </nav>
+
+    <div class="admin-user d-flex align-items-center gap-2">
+
+        <div class="admin-avatar">
+            {{ request.session.utilizador_nome|first|upper }}
+        </div>
+
+        <div class="flex-grow-1 min-w-0">
+            <div class="admin-user-name text-truncate">
+                {{ request.session.utilizador_nome }}
+            </div>
+
+            <div class="admin-user-role">
+                Administrador
+            </div>
+        </div>
+
+        <form method="post" action="{% url 'admin:logout' %}">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-link p-0 text-secondary text-decoration-none"
+                    title="Terminar sessão"
+                    aria-label="Terminar sessão">
+                →
+            </button>
+        </form>
+
+    </div>
+
+</aside>
