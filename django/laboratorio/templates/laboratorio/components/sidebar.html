@@ -1,62 +1,152 @@
+
 {% load static %}
 
-<aside class="admin-sidebar">
+<div class="admin-sidebar">
+
+    <!-- LOGÓTIPO -->
 
     <div class="admin-brand">
-        <a href="{% url 'dashboard_admin' %}">
+
+        <a href="
+            {% if request.session.tipo_utilizador_id == 1 %}
+                {% url 'dashboard_admin' %}
+            {% elif request.session.tipo_utilizador_id == 2 %}
+                {% url 'dashboard_colaborador' %}
+            {% else %}
+                {% url 'dashboard_cliente' %}
+            {% endif %}
+        ">
             <img
                 src="{% static 'laboratorio/img/logo-horizontal.png' %}"
                 alt="Laboratório Catarina Domingos"
             >
         </a>
+
     </div>
+
+
+    <!-- MENU DE NAVEGAÇÃO -->
 
     <nav class="admin-nav nav flex-column" aria-label="Menu principal">
 
-        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard_admin' %}active{% endif %}"
-           href="{% url 'dashboard_admin' %}">
-            <span class="nav-icon">◉</span>
-            Dashboard
-        </a>
+        {% with tipo=request.session.tipo_utilizador_id %}
 
-        <a class="nav-link" href="/admin/auth/user/">
-            <span class="nav-icon">◎</span>
-            Utilizadores
-        </a>
+            {% if tipo == 1 %}
 
-        <a class="nav-link" href="/admin/">
-            <span class="nav-icon">⌘</span>
-            Administração Django
-        </a>
+                <!-- ADMINISTRADOR -->
+
+                <a
+                    class="nav-link {% if request.resolver_match.url_name == 'dashboard_admin' %}active{% endif %}"
+                    href="{% url 'dashboard_admin' %}"
+                >
+                    <span class="nav-icon">◉</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a
+                    class="nav-link {% if request.resolver_match.url_name == 'utilizadores_admin' %}active{% endif %}"
+                    href="{% url 'utilizadores_admin' %}"
+                >
+                    <span class="nav-icon">◎</span>
+                    <span>Utilizadores</span>
+                </a>
+
+                <a
+                    class="nav-link {% if request.resolver_match.url_name == 'encomendas_admin' %}active{% endif %}"
+                    href="{% url 'encomendas_admin' %}"
+                >
+                    <span class="nav-icon">▤</span>
+                    <span>Encomendas</span>
+                </a>
+
+
+            {% elif tipo == 2 %}
+
+                <!-- COLABORADOR -->
+
+                <a
+                    class="nav-link {% if request.resolver_match.url_name == 'dashboard_colaborador' %}active{% endif %}"
+                    href="{% url 'dashboard_colaborador' %}"
+                >
+                    <span class="nav-icon">◉</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a class="nav-link" href="#">
+                    <span class="nav-icon">◎</span>
+                    <span>Área de trabalho</span>
+                </a>
+
+
+            {% elif tipo == 3 %}
+
+                <!-- CLIENTE -->
+
+                <a
+                    class="nav-link {% if request.resolver_match.url_name == 'dashboard_cliente' %}active{% endif %}"
+                    href="{% url 'dashboard_cliente' %}"
+                >
+                    <span class="nav-icon">◉</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a class="nav-link" href="#">
+                    <span class="nav-icon">◎</span>
+                    <span>O meu perfil</span>
+                </a>
+
+            {% endif %}
+
+        {% endwith %}
 
     </nav>
 
-    <div class="admin-user d-flex align-items-center gap-2">
+
+    <!-- UTILIZADOR AUTENTICADO -->
+
+    <div class="admin-user">
 
         <div class="admin-avatar">
             {{ request.session.utilizador_nome|first|upper }}
         </div>
 
-        <div class="flex-grow-1 min-w-0">
+        <div class="admin-user-info">
+
             <div class="admin-user-name text-truncate">
                 {{ request.session.utilizador_nome }}
             </div>
 
             <div class="admin-user-role">
-                Administrador
+
+                {% if request.session.tipo_utilizador_id == 1 %}
+                    Administrador
+                {% elif request.session.tipo_utilizador_id == 2 %}
+                    Colaborador
+                {% elif request.session.tipo_utilizador_id == 3 %}
+                    Cliente
+                {% endif %}
+
             </div>
+
         </div>
 
-        <form method="post" action="{% url 'admin:logout' %}">
+        <!-- TERMINAR SESSÃO -->
+
+        <form method="post" action="{% url 'logout' %}">
+
             {% csrf_token %}
-            <button type="submit"
-                    class="btn btn-link p-0 text-secondary text-decoration-none"
-                    title="Terminar sessão"
-                    aria-label="Terminar sessão">
+
+            <button
+                type="submit"
+                class="btn btn-link p-0 text-decoration-none"
+                title="Terminar sessão"
+                aria-label="Terminar sessão"
+            >
                 →
             </button>
+
         </form>
 
     </div>
 
-</aside>
+</div>

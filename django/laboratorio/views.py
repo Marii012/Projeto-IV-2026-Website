@@ -96,3 +96,20 @@ def dashboard_cliente(request):
         request,
         'laboratorio/dashboard/cliente/dashboard_cliente.html'
     )
+
+def utilizadores_admin(request):
+    return render(
+        request,
+        'laboratorio/dashboard/admin/utilizadores.html'
+    )
+
+
+def encomendas_admin(request):
+    return render(
+        request,
+        'laboratorio/dashboard/admin/encomendas.html'
+    )
+
+def logout(request):
+    request.session.flush()
+    return redirect('entrar')
