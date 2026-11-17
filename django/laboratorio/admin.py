@@ -1,8 +1,12 @@
 from django.contrib import admin
-from .models import PedidoContacto
+from django.urls import path
+from laboratorio import views
 
-@admin.register(PedidoContacto)
-class PedidoContactoAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'laboratorio', 'email', 'telefone', 'criado_em')
-    search_fields = ('nome', 'laboratorio', 'email')
-    readonly_fields = ('criado_em',)
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home, name='home'),
+    path('entrar/', views.entrar, name='entrar'),
+    path('registo/', views.registo, name='registo'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('contacto/', views.contacto, name='contacto'),
+]
