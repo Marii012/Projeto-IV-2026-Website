@@ -1,4 +1,4 @@
-from django.db import connection
+from django.db import connection, transaction
 from django.contrib.auth.hashers import make_password
 
 
@@ -48,7 +48,7 @@ def inserir_utilizador(nome, email, password, cargo,
     if cargo is not None and len(cargo) > 60:
         raise ValueError("O cargo não pode ultrapassar 60 caracteres.")
 
-    # Transformar a palavra-passe num hash seguro
+    # Se não existir palavra-passe, criar uma conta sem password utilizável.
     password_hash = make_password(password)
 
     if len(password_hash) > 255:
@@ -61,10 +61,41 @@ def inserir_utilizador(nome, email, password, cargo,
                 id_tipo_utilizador, id_estado
             )
             VALUES (%s, %s, %s, %s, %s, %s)
+            RETURNING id
         """, [
             nome, email, password_hash, cargo,
             id_tipo_utilizador, id_estado
         ])
+
+        resultado = cursor.fetchone()
+        return resultado[0]
+
+
+def inserir_cliente(id_utilizador, nome, nif, telefone):
+
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            INSERT INTO cliente (
+                id_utilizador, nome, nif, telefone
+            )
+            VALUES (%s, %s, %s, %s)
+            RETURNING id
+        """, [id_utilizador, nome, nif, telefone])
+
+        resultado = cursor.fetchone()
+        return resultado[0]
+
+
+def inserir_morada(id_cliente, nome_clinica, morada):
+
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            INSERT INTO morada (
+                id_cliente, nome_clinica, morada
+            )
+            VALUES (%s, %s, %s)
+        """, [id_cliente, nome_clinica, morada])
+
 
 
 def atualizar_utilizador(id, nome, email, password, cargo,

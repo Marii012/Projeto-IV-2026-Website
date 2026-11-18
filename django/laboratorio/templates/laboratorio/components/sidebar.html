@@ -44,19 +44,19 @@
                 </a>
 
                 <a
-                    class="nav-link {% if request.resolver_match.url_name == 'utilizadores_admin' %}active{% endif %}"
-                    href="{% url 'utilizadores_admin' %}"
-                >
-                    <span class="nav-icon">◎</span>
-                    <span>Utilizadores</span>
-                </a>
-
-                <a
                     class="nav-link {% if request.resolver_match.url_name == 'encomendas_admin' %}active{% endif %}"
                     href="{% url 'encomendas_admin' %}"
                 >
                     <span class="nav-icon">▤</span>
                     <span>Encomendas</span>
+                </a>
+
+                <a
+                    class="nav-link {% if request.resolver_match.url_name == 'utilizadores_admin' %}active{% endif %}"
+                    href="{% url 'utilizadores_admin' %}"
+                >
+                    <span class="nav-icon">◎</span>
+                    <span>Utilizadores</span>
                 </a>
 
 

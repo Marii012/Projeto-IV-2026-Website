@@ -1,0 +1,495 @@
+
+{% extends 'laboratorio/dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Utilizadores | Administrador{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'laboratorio/css/dashboard/admin/utilizadores.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="users-page">
+
+    <!-- Cabeçalho e separadores -->
+    <div class="users-topbar">
+
+        <nav class="users-tabs">
+
+            <a href="{% url 'utilizadores_admin' %}?tipo=clientes"
+               class="users-tab {% if tipo_atual == 'clientes' or not tipo_atual %}active{% endif %}">
+                CLIENTES ({{ total_clientes|default:"0" }})
+            </a>
+
+            <a href="{% url 'utilizadores_admin' %}?tipo=colaboradores"
+               class="users-tab {% if tipo_atual == 'colaboradores' %}active{% endif %}">
+                COLABORADORES ({{ total_colaboradores|default:"0" }})
+            </a>
+
+        </nav>
+
+        <!-- Botão criar -->
+        <div class="dropdown">
+
+            <button
+                class="users-create-btn dropdown-toggle"
+                type="button"
+                id="createUserDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+                + CRIAR
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end users-create-menu"
+                aria-labelledby="createUserDropdown">
+
+                <li>
+                    <button
+                        class="dropdown-item"
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalCriarCliente">
+                        Criar cliente
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                        class="dropdown-item"
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalCriarColaborador">
+                        Criar colaborador
+                    </button>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- Pesquisa -->
+    <form method="GET"
+          action="{% url 'utilizadores_admin' %}"
+          class="users-search-form">
+
+        <input type="hidden"
+               name="tipo"
+               value="{{ tipo_atual|default:'clientes' }}">
+
+        <input
+            type="search"
+            name="pesquisa"
+            class="users-search"
+            placeholder="Pesquisar por nome, NIF ou e-mail..."
+            value="{{ pesquisa|default:'' }}">
+
+    </form>
+
+    <!-- Lista de utilizadores -->
+    <section class="users-list">
+
+        {% for utilizador in utilizadores %}
+
+            <article class="user-row">
+
+                <div class="user-info">
+
+                    <div class="user-name-line">
+
+                        <h2>{{ utilizador.nome }}</h2>
+
+                        {% if utilizador.estado == 'Ativo' %}
+                            <span class="user-status active">
+                                Ativo
+                            </span>
+                        {% else %}
+                            <span class="user-status inactive">
+                                {{ utilizador.estado|default:"Inativo" }}
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    <p>NIF: {{ utilizador.nif|default:"—" }}</p>
+
+                </div>
+
+                <div class="user-actions">
+
+                    <span class="user-jobs">
+
+                        <strong>{{ utilizador.total_trabalhos|default:"0" }}</strong>
+
+                        {% if utilizador.total_trabalhos == 1 %}
+                            trabalho
+                        {% else %}
+                            trabalhos
+                        {% endif %}
+
+                    </span>
+
+                    <a
+                        href="{% url 'utilizadores_admin' %}?tipo={{ tipo_atual }}&editar={{ utilizador.id }}"
+                        class="user-edit-btn"
+                        aria-label="Editar {{ utilizador.nome }}"
+                        title="Editar utilizador">
+
+                        <span aria-hidden="true">✎</span>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+        {% empty %}
+
+            <div class="users-empty">
+                <p>Não foram encontrados utilizadores.</p>
+            </div>
+
+        {% endfor %}
+
+    </section>
+
+</div>
+
+
+<!-- ===================================== -->
+<!-- MODAL CRIAR CLIENTE -->
+<!-- ===================================== -->
+
+<div class="modal fade"
+     id="modalCriarCliente"
+     tabindex="-1"
+     aria-labelledby="tituloModalCliente"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content users-modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <p class="users-modal-kicker">
+                        GESTÃO DE UTILIZADORES
+                    </p>
+
+                    <h5 class="modal-title" id="tituloModalCliente">
+                        Criar cliente
+                    </h5>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Fechar">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form method="POST"
+                      action="{% url 'utilizadores_admin' %}">
+
+                    {% csrf_token %}
+
+                    <input type="hidden"
+                           name="tipo_utilizador"
+                           value="cliente">
+
+                    <!-- Mensagem de erro -->
+                    {% if abrir_modal == 'cliente' and erro_formulario %}
+
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Não foi possível criar o cliente.</strong>
+                            <p class="mb-0 mt-1">{{ erro_formulario }}</p>
+                        </div>
+
+                    {% endif %}
+
+                    <!-- Nome -->
+                    <div class="users-form-group">
+
+                        <label for="nomeCliente">
+                            Nome / Clínica
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nomeCliente"
+                            name="nome"
+                            placeholder="Nome da pessoa ou clínica"
+                            maxlength="120"
+                            value="{{ dados_formulario.nome|default:'' }}"
+                            required>
+
+                    </div>
+
+                    <!-- Email -->
+                    <div class="users-form-group">
+
+                        <label for="emailCliente">
+                            E-mail
+                        </label>
+
+                        <input
+                            type="email"
+                            id="emailCliente"
+                            name="email"
+                            placeholder="exemplo@email.com"
+                            maxlength="150"
+                            value="{{ dados_formulario.email|default:'' }}"
+                            required>
+
+                    </div>
+
+                    <!-- Telefone -->
+                    <div class="users-form-group">
+
+                        <label for="telefoneCliente">
+                            Telefone
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="telefoneCliente"
+                            name="telefone"
+                            placeholder="Número de telefone"
+                            maxlength="20"
+                            value="{{ dados_formulario.telefone|default:'' }}"
+                            required>
+
+                    </div>
+
+                    <!-- NIF -->
+                    <div class="users-form-group">
+
+                        <label for="nifCliente">
+                            NIF
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nifCliente"
+                            name="nif"
+                            placeholder="Ex.: 123456789"
+                            maxlength="9"
+                            minlength="9"
+                            pattern="[0-9]{9}"
+                            inputmode="numeric"
+                            title="O NIF deve conter exatamente 9 algarismos."
+                            value="{{ dados_formulario.nif|default:'' }}"
+                            required>
+
+                        <small>
+                            Introduz exatamente 9 algarismos.
+                        </small>
+
+                    </div>
+
+                    <!-- Morada -->
+                    <div class="users-form-group">
+
+                        <label for="moradaCliente">
+                            Morada
+                        </label>
+
+                        <input
+                            type="text"
+                            id="moradaCliente"
+                            name="morada"
+                            placeholder="Morada completa"
+                            value="{{ dados_formulario.morada|default:'' }}"
+                            required>
+
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="users-modal-actions">
+
+                        <button
+                            type="button"
+                            class="users-cancel-btn"
+                            data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="users-save-btn">
+                            Criar cliente
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================== -->
+<!-- MODAL CRIAR COLABORADOR -->
+<!-- ===================================== -->
+
+<div class="modal fade"
+     id="modalCriarColaborador"
+     tabindex="-1"
+     aria-labelledby="tituloModalColaborador"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content users-modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <p class="users-modal-kicker">
+                        GESTÃO DE UTILIZADORES
+                    </p>
+
+                    <h5 class="modal-title" id="tituloModalColaborador">
+                        Criar colaborador
+                    </h5>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Fechar">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <form method="POST"
+                      action="{% url 'utilizadores_admin' %}">
+
+                    {% csrf_token %}
+
+                    <input type="hidden"
+                           name="tipo_utilizador"
+                           value="colaborador">
+
+                    <!-- Mensagem de erro -->
+                    {% if abrir_modal == 'colaborador' and erro_formulario %}
+
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Não foi possível criar o colaborador.</strong>
+                            <p class="mb-0 mt-1">{{ erro_formulario }}</p>
+                        </div>
+
+                    {% endif %}
+
+                    <!-- Nome -->
+                    <div class="users-form-group">
+
+                        <label for="nomeColaborador">
+                            Nome
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nomeColaborador"
+                            name="nome"
+                            placeholder="Nome completo"
+                            maxlength="100"
+                            value="{{ dados_formulario.nome|default:'' }}"
+                            required>
+
+                    </div>
+
+                    <!-- Email -->
+                    <div class="users-form-group">
+
+                        <label for="emailColaborador">
+                            E-mail
+                        </label>
+
+                        <input
+                            type="email"
+                            id="emailColaborador"
+                            name="email"
+                            placeholder="exemplo@email.com"
+                            maxlength="150"
+                            value="{{ dados_formulario.email|default:'' }}"
+                            required>
+
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="users-modal-actions">
+
+                        <button
+                            type="button"
+                            class="users-cancel-btn"
+                            data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="users-save-btn">
+                            Criar colaborador
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Abrir automaticamente o modal quando existe um erro -->
+{% if abrir_modal %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const tipoModal = '{{ abrir_modal }}';
+
+    let modalId = '';
+
+    if (tipoModal === 'cliente') {
+        modalId = 'modalCriarCliente';
+    } else if (tipoModal === 'colaborador') {
+        modalId = 'modalCriarColaborador';
+    }
+
+    const modalElemento = document.getElementById(modalId);
+
+    if (modalElemento && typeof bootstrap !== 'undefined') {
+
+        const modal = new bootstrap.Modal(modalElemento);
+
+        modal.show();
+
+    }
+
+});
+</script>
+
+{% endif %}
+
+{% endblock %}
