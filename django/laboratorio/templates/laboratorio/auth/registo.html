@@ -25,7 +25,7 @@
                 >
             </a>
 
-            <div class="login-visual-bottom">
+            <div class="register-visual-bottom" data-aos="fade-right">
 
                 <blockquote>
                     "O primeiro passo para
@@ -69,6 +69,13 @@
 
             <div class="login-separator"></div>
 
+            <!-- MENSAGEM DE ERRO DO REGISTO -->
+            {% if erro_registo %}
+                <div class="alert alert-danger" role="alert">
+                    {{ erro_registo }}
+                </div>
+            {% endif %}
+
             <!-- FORMULÁRIO -->
             <form method="post" class="login-form">
 
@@ -81,6 +88,7 @@
                         id="nome"
                         name="nome"
                         placeholder="Nome da clínica"
+                        value="{{ dados_registo.nome|default:'' }}"
                         required
                     >
                 </div>
@@ -88,12 +96,12 @@
                 <div class="login-row">
                     <div class="login-field">
                         <label for="email">E-mail</label>
-                        <input type="email" id="email" name="email" placeholder="geral@clinica.pt" required>
+                        <input type="email" id="email" name="email" placeholder="geral@clinica.pt" maxlength="150" value="{{ dados_registo.email|default:'' }}" required>
                     </div>
 
                     <div class="login-field">
                         <label for="telefone">Telefone</label>
-                        <input type="tel" id="telefone" name="telefone" placeholder="+351 000 000 000" required>
+                        <input type="tel" id="telefone" name="telefone" placeholder="+351 000 000 000" pattern="[0-9]+" inputmode="numeric" maxlength="20" value="{{ dados_registo.telefone|default:'' }}" required>
                     </div>
                 </div>
 
@@ -103,7 +111,12 @@
                         type="text"
                         id="nif"
                         name="nif"
-                        placeholder="000 000 000"
+                        placeholder="000000000"
+                        maxlength="9"
+                        minlength="9"
+                        pattern="[0-9]{9}"
+                        inputmode="numeric"
+                        value="{{ dados_registo.nif|default:'' }}"
                         required
                     >
                 </div>
@@ -114,20 +127,64 @@
                 </div>
 
                 <div id="moradas-container">
-                    <div class="login-field morada-item">
-                        <input type="text" name="morada[]" placeholder="Morada 1 — rua, código postal, localidade" required>
-                    </div>
+                    {% for morada in moradas_registo %}
+                        <div class="login-field morada-item">
+                            <input
+                                type="text"
+                                name="morada[]"
+                                placeholder="Morada {{ forloop.counter }} — rua, código postal, localidade"
+                                value="{{ morada }}"
+                                required
+                            >
+                
+                            {% if not forloop.first %}
+                                <button type="button" class="remove-morada" aria-label="Remover morada">
+                                    ×
+                                </button>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
                 </div>
 
                 <div class="login-row">
                     <div class="login-field">
                         <label for="password">Palavra-passe</label>
-                        <input type="password" id="password" name="password" placeholder="Mínimo 6 caracteres" minlength="6" autocomplete="new-password" required>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" minlength="8" autocomplete="new-password" required>
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-password-toggle
+                                aria-label="Mostrar palavra-passe"
+                                aria-pressed="false"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path class="password-toggle-slash" d="m4 4 16 16"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="login-field">
                         <label for="confirmar_password">Confirmar palavra-passe</label>
-                        <input type="password" id="confirmar_password" name="confirmar_password" placeholder="Repita a palavra-passe" minlength="6" autocomplete="new-password" required>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="confirmar_password" name="confirmar_password" placeholder="Repita a palavra-passe" minlength="8" autocomplete="new-password" required>
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                data-password-toggle
+                                aria-label="Mostrar palavra-passe"
+                                aria-pressed="false"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path class="password-toggle-slash" d="m4 4 16 16"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

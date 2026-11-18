@@ -5,6 +5,8 @@
 .login-page {
     min-height: 100vh;
     height: auto;
+    display: flex;
+    align-items: stretch;
 }
 
 .login-content {
@@ -14,7 +16,8 @@
 }
 
 .login-form-wrapper {
-    max-width: 400px;
+    max-width: 480px;
+    transform: translateY(-60px);
 }
 
 .login-form {
@@ -45,7 +48,11 @@
 
 .login-section-header label {
     font-family: 'Outfit', sans-serif !important;
-    margin-bottom: 0 !important;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    transform: translateY(7px);
 }
 
 /* Estilo do botão de adicionar morada */
@@ -53,15 +60,19 @@
     background: none;
     border: none;
     color: #d4af37; /* Ajusta para a cor dourada do teu tema */
-    font-family: inherit;
+    font-family: 'Outfit', sans-serif;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     padding: 0;
+
+    position: relative;
+    top: 7px;
 }
 
 .login-action-btn:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: #e2cc83;
 }
 
 /* Espaçamento entre moradas dinâmicas */
@@ -98,4 +109,50 @@
 .remove-morada:hover {
     background: #be414130;
     border-color: #be414130;
+}
+
+.register-visual-bottom {
+    transform: translateY(175px);
+}
+
+.register-visual-bottom blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-style: italic;
+    line-height: 1.4;
+    margin-bottom: 20px;
+    color: #F5F0E8;
+}
+
+.register-visual-bottom p {
+    color: #A09080;
+    font-size: 13px;
+    font-weight: 300;
+    margin: 0;
+}
+
+.register-visual-bottom {
+    margin-top: auto;
+    transform: translateY(175px);
+}
+
+.register-visual-bottom[data-aos="fade-right"] {
+    opacity: 0;
+    transform: translate3d(-50px, 175px, 0);
+    transition-property: opacity, transform;
+}
+
+.register-visual-bottom[data-aos="fade-right"].aos-animate {
+    opacity: 1;
+    transform: translate3d(0, 175px, 0);
+}
+
+.alert-danger {
+    background-color: rgba(180, 50, 50, 0.12);
+    border: 1px solid rgba(220, 80, 80, 0.4);
+    color: #e99a9a;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 20px;
 }

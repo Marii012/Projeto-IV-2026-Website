@@ -1,7 +1,42 @@
-
 document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const passwordInput = button.parentElement.querySelector('input');
+            const passwordVisible = passwordInput.type === 'text';
+
+            passwordInput.type = passwordVisible ? 'password' : 'text';
+            button.setAttribute('aria-pressed', String(!passwordVisible));
+            button.setAttribute(
+                'aria-label',
+                passwordVisible ? 'Mostrar palavra-passe' : 'Ocultar palavra-passe'
+            );
+        });
+    });
+
     const addButton = document.getElementById('add-morada');
     const moradasContainer = document.getElementById('moradas-container');
+
+    // Permitir apenas números no NIF e telefone
+    const nifInput = document.getElementById('nif');
+    const telefoneInput = document.getElementById('telefone');
+
+    [nifInput, telefoneInput].forEach(function (input) {
+        if (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+
+    // Limitar o NIF a 9 algarismos
+    if (nifInput) {
+        nifInput.setAttribute('maxlength', '9');
+    }
+
+    // Verificar se os elementos das moradas existem
+    if (!addButton || !moradasContainer) {
+        return;
+    }
 
     const LIMITE_MORADAS = 4;
 
@@ -14,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
             input.placeholder = `Morada ${index + 1} — rua, código postal, localidade`;
         });
 
-        // Desativar o botão quando atingir o limite
         addButton.disabled = moradas.length >= LIMITE_MORADAS;
 
         addButton.textContent = moradas.length >= LIMITE_MORADAS
@@ -49,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         atualizarMoradas();
     });
-
     moradasContainer.addEventListener('click', function (event) {
         if (event.target.classList.contains('remove-morada')) {
             event.target.closest('.morada-item').remove();

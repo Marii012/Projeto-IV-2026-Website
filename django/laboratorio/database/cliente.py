@@ -36,7 +36,12 @@ def inserir_cliente(nome, nif, telefone, data_aprovacao, id_utilizador):
             INSERT INTO cliente
                 (nome, nif, telefone, data_aprovacao, id_utilizador)
             VALUES (%s, %s, %s, %s, %s)
+            RETURNING id
         """, [nome, nif, telefone, data_aprovacao, id_utilizador])
+
+        resultado = cursor.fetchone()
+
+        return resultado[0]
 
 
 def atualizar_cliente(id, nome, nif, telefone, data_aprovacao, id_utilizador):

@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const menu = document.querySelector('.site-nav .navbar-collapse');
     const toggler = document.querySelector('.site-nav .navbar-toggler');
 
+    if (!menu || !toggler) {
+        return;
+    }
+
     // Fechar ao clicar nos links
     document.querySelectorAll('.site-nav .nav-link').forEach(link => {
 

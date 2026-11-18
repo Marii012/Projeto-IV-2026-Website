@@ -94,7 +94,7 @@
 
 .login-form-wrapper {
     width: 100%;
-    max-width: 400px;
+    max-width: 480px;
     margin: 0 auto;
 }
 
@@ -177,6 +177,60 @@
 
 .login-field input:focus {
     border-color: rgba(201, 168, 76, .65);
+}
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-input-wrapper input {
+    padding-right: 48px;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    display: grid;
+    width: 38px;
+    height: 38px;
+    padding: 8px;
+    place-items: center;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 0;
+    color: #A09080;
+    cursor: pointer;
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+    color: #C9A84C;
+}
+
+.password-toggle:focus-visible {
+    outline: 1px solid #C9A84C;
+    outline-offset: 1px;
+}
+
+.password-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
+}
+
+.password-toggle-slash {
+    opacity: 1;
+    transition: opacity .2s ease;
+}
+
+.password-toggle[aria-pressed="true"] .password-toggle-slash {
+    opacity: 0;
 }
 
 
@@ -360,4 +414,15 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Corrigir preenchimento automático do Chrome */
+.login-field input:-webkit-autofill,
+.login-field input:-webkit-autofill:hover,
+.login-field input:-webkit-autofill:focus,
+.login-field input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #1A1A1A inset !important;
+    -webkit-text-fill-color: #F5F0E8 !important;
+    caret-color: #F5F0E8;
+    transition: background-color 9999s ease-in-out 0s;
 }

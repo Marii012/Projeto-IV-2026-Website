@@ -1,16 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import render, redirect
-
-from laboratorio.database.utilizador import obter_utilizador_por_email
-
 from django.db import connection, transaction, IntegrityError
+
 from laboratorio.database.utilizador import (
-    inserir_utilizador,
-    inserir_cliente,
-    inserir_morada,
+    obter_utilizador_por_email,
+    inserir_utilizador
 )
 
+from laboratorio.database.cliente import inserir_cliente
+from laboratorio.database.morada import inserir_morada
 
 def home(request):
     return render(request, 'laboratorio/public/home.html')
@@ -24,6 +23,14 @@ def entrar(request):
     if request.method == 'POST':
         email = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
+
+        # Validar limite do email
+        if len(email) > 150:
+            messages.error(
+                request,
+                'O email não pode ultrapassar 150 caracteres.'
+            )
+            return render(request, 'laboratorio/auth/login.html')
 
         utilizador = obter_utilizador_por_email(email)
 
@@ -81,7 +88,109 @@ def entrar(request):
 
 
 def registo(request):
-    return render(request, 'laboratorio/auth/registo.html')
+
+    erro_registo = None
+
+    if request.method == 'POST':
+
+        nome = request.POST.get('nome', '').strip()
+        email = request.POST.get('email', '').strip()
+        telefone = request.POST.get('telefone', '').strip()
+        nif = request.POST.get('nif', '').strip()
+
+        password = request.POST.get('password', '')
+        confirmar_password = request.POST.get('confirmar_password', '')
+
+        moradas = [
+            morada.strip()
+            for morada in request.POST.getlist('morada[]')
+            if morada.strip()
+        ]
+
+        try:
+
+            if not nome or not email or not telefone or not nif:
+                raise ValueError('Preenche todos os campos obrigatórios.')
+            if len(email) > 150:
+                raise ValueError('O email não pode ultrapassar 150 caracteres.')
+            
+            if len(telefone) > 20:
+                raise ValueError('O telefone não pode ultrapassar 20 algarismos.')
+
+            if not password or not confirmar_password:
+                raise ValueError('Preenche os campos da palavra-passe.')
+
+            if password != confirmar_password:
+                raise ValueError('As palavras-passe não coincidem.')
+
+            if len(password) < 8:
+                raise ValueError('A palavra-passe deve ter pelo menos 8 caracteres.')
+
+            if not nif.isdigit() or len(nif) != 9:
+                raise ValueError('O NIF deve conter exatamente 9 algarismos.')
+
+            if not moradas:
+                raise ValueError('Adiciona pelo menos uma morada.')
+
+            if len(moradas) > 4:
+                raise ValueError('Podes adicionar no máximo 4 moradas.')
+
+            with transaction.atomic():
+
+                id_utilizador = inserir_utilizador(
+                    nome=nome,
+                    email=email,
+                    password=password,
+                    cargo=None,
+                    id_tipo_utilizador=3,
+                    id_estado=1
+                )
+
+                id_cliente = inserir_cliente(
+                    nome=nome,
+                    nif=nif,
+                    telefone=telefone,
+                    data_aprovacao=None,
+                    id_utilizador=id_utilizador
+                )
+
+                for morada in moradas:
+                    inserir_morada(
+                        nome_clinica=nome,
+                        morada=morada,
+                        id_cliente=id_cliente
+                    )
+
+            messages.success(
+                request,
+                'Pedido de registo enviado com sucesso! Aguarda a aprovação do administrador.'
+            )
+
+            return redirect('entrar')
+
+        except IntegrityError:
+            erro_registo = (
+                'O email ou NIF introduzido já está associado a outra conta.'
+            )
+
+        except ValueError as erro:
+            erro_registo = str(erro)
+
+        except Exception as erro:
+            print('ERRO NO REGISTO:', repr(erro))
+            erro_registo = (
+                'Ocorreu um erro ao efetuar o registo. Tenta novamente.'
+            )
+
+    return render(
+        request,
+        'laboratorio/auth/registo.html',
+        {
+            'erro_registo': erro_registo,
+            'dados_registo': request.POST,
+            'moradas_registo': request.POST.getlist('morada[]') or ['']
+        }
+    )
 
 
 def dashboard_admin(request):
@@ -186,10 +295,17 @@ def utilizadores_admin(request):
                         'Preenche o NIF, telefone e morada.'
                     )
 
-                if not nif.isdigit() or len(nif) != 9:
-                    raise ValueError(
-                        'O NIF deve conter exatamente 9 algarismos.'
-                    )
+                if not nif.isdigit():
+                    raise ValueError('O NIF só pode conter algarismos.')
+                
+                if len(nif) != 9:
+                    raise ValueError('O NIF deve conter exatamente 9 algarismos.')
+                
+                if not telefone.isdigit():
+                    raise ValueError('O telefone só pode conter algarismos.')
+                
+                if len(telefone) > 20:
+                    raise ValueError('O telefone não pode ultrapassar 20 algarismos.')
 
             # Criar registos na base de dados
             with transaction.atomic():
