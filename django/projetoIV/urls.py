@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import  include, path   
 from laboratorio import views
 
 urlpatterns = [
@@ -18,4 +18,6 @@ urlpatterns = [
     path('dashboard/admin/encomendas/', views.encomendas_admin, name='encomendas_admin'),
 
     path('logout/', views.logout, name='logout'),
+
+    path('api/', include('api.urls')),      # NOVO: API da app móvel
 ]
