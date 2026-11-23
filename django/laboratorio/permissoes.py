@@ -23,7 +23,7 @@ def requer_tipo(*tipos):
     def decorator(view):
         @wraps(view)
         def wrapper(request, *args, **kwargs):
-            if not request.session.get('token'):
+            if not request.session.get('utilizador_id'):
                 return redirect('entrar')
             tipo = request.session.get('tipo_utilizador_id')
             if tipo not in tipos:

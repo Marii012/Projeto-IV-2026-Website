@@ -97,7 +97,6 @@ def inserir_morada(id_cliente, nome_clinica, morada):
         """, [id_cliente, nome_clinica, morada])
 
 
-
 def atualizar_utilizador(id, nome, email, password, cargo,
                          id_tipo_utilizador, id_estado):
 
@@ -110,30 +109,51 @@ def atualizar_utilizador(id, nome, email, password, cargo,
     if cargo is not None and len(cargo) > 60:
         raise ValueError("O cargo não pode ultrapassar 60 caracteres.")
 
-    password_hash = make_password(password)
-
-    if len(password_hash) > 255:
-        raise ValueError("A password hash não pode ultrapassar 255 caracteres.")
-
     with connection.cursor() as cursor:
-        cursor.execute("""
-            UPDATE utilizador
-            SET nome = %s,
-                email = %s,
-                password_hash = %s,
-                cargo = %s,
-                id_tipo_utilizador = %s,
-                id_estado = %s
-            WHERE id = %s
-        """, [
-            nome, email, password_hash, cargo,
-            id_tipo_utilizador, id_estado, id
-        ])
+
+        if password:
+            password_hash = make_password(password)
+
+            if len(password_hash) > 255:
+                raise ValueError("A password hash não pode ultrapassar 255 caracteres.")
+
+            cursor.execute("""
+                UPDATE utilizador
+                SET nome = %s,
+                    email = %s,
+                    password_hash = %s,
+                    cargo = %s,
+                    id_tipo_utilizador = %s,
+                    id_estado = %s
+                WHERE id = %s
+            """, [
+                nome, email, password_hash, cargo,
+                id_tipo_utilizador, id_estado, id
+            ])
+
+        else:
+            cursor.execute("""
+                UPDATE utilizador
+                SET nome = %s,
+                    email = %s,
+                    cargo = %s,
+                    id_tipo_utilizador = %s,
+                    id_estado = %s
+                WHERE id = %s
+            """, [
+                nome, email, cargo,
+                id_tipo_utilizador, id_estado, id
+            ])
+
+        return cursor.rowcount
 
 
 def eliminar_utilizador(id):
+
     with connection.cursor() as cursor:
         cursor.execute("""
             DELETE FROM utilizador
             WHERE id = %s
         """, [id])
+
+        return cursor.rowcount

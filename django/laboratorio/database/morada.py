@@ -21,6 +21,7 @@ def obter_morada(id):
         return cursor.fetchone()
 
 
+
 def inserir_morada(nome_clinica, morada, id_cliente):
     if len(nome_clinica) > 120:
         raise ValueError("O nome da clínica não pode ultrapassar 120 caracteres.")
@@ -32,7 +33,13 @@ def inserir_morada(nome_clinica, morada, id_cliente):
         cursor.execute("""
             INSERT INTO morada (nome_clinica, morada, id_cliente)
             VALUES (%s, %s, %s)
+            RETURNING id
         """, [nome_clinica, morada, id_cliente])
+
+        resultado = cursor.fetchone()
+
+        return resultado[0]
+
 
 
 def atualizar_morada(id, nome_clinica, morada, id_cliente):
@@ -51,6 +58,8 @@ def atualizar_morada(id, nome_clinica, morada, id_cliente):
             WHERE id = %s
         """, [nome_clinica, morada, id_cliente, id])
 
+        return cursor.rowcount
+
 
 def eliminar_morada(id):
     with connection.cursor() as cursor:
@@ -58,3 +67,5 @@ def eliminar_morada(id):
             DELETE FROM morada
             WHERE id = %s
         """, [id])
+
+        return cursor.rowcount

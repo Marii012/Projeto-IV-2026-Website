@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.hashers import check_password
 from django.shortcuts import render, redirect
 
+from laboratorio.database.utilizador import obter_utilizador_por_email
 from laboratorio.permissoes import (
     DASHBOARD_POR_TIPO, requer_tipo, sessao_expirada
 )
@@ -20,26 +22,27 @@ def entrar(request):
         email = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
 
-        try:
-            resposta = api(
-                'POST', '/auth/login',
-                json={'email': email, 'password': password}
-            )
-        except ApiError as erro:
-            messages.error(request, erro.detalhe)
+        utilizador = obter_utilizador_por_email(email)
+        if (
+            utilizador is None
+            or not utilizador[3]
+            or not check_password(password, utilizador[3])
+        ):
+            messages.error(request, 'Email ou palavra-passe inválidos.')
             return render(request, 'laboratorio/auth/login.html')
 
-        utilizador = resposta['utilizador']
+        if utilizador[7] not in (2, 12):
+            messages.error(request, 'A conta não está autorizada a entrar.')
+            return render(request, 'laboratorio/auth/login.html')
 
-        # Guardar na sessão o token da API e os dados do utilizador
-        request.session['token'] = resposta['access_token']
-        request.session['utilizador_id'] = utilizador['id']
-        request.session['utilizador_nome'] = utilizador['nome']
-        request.session['utilizador_email'] = utilizador['email']
-        request.session['tipo_utilizador_id'] = utilizador['id_tipo_utilizador']
+        request.session.flush()
+        request.session['utilizador_id'] = utilizador[0]
+        request.session['utilizador_nome'] = utilizador[1]
+        request.session['utilizador_email'] = utilizador[2]
+        request.session['tipo_utilizador_id'] = utilizador[6]
 
         # Encaminhar conforme o tipo de utilizador
-        destino = DASHBOARD_POR_TIPO.get(utilizador['id_tipo_utilizador'])
+        destino = DASHBOARD_POR_TIPO.get(utilizador[6])
 
         if destino:
             return redirect(destino)

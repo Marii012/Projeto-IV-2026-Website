@@ -10,7 +10,6 @@ def listar_clientes():
         """)
         return cursor.fetchall()
 
-
 def obter_cliente(id):
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -19,7 +18,6 @@ def obter_cliente(id):
             WHERE id = %s
         """, [id])
         return cursor.fetchone()
-
 
 def inserir_cliente(nome, nif, telefone, data_aprovacao, id_utilizador):
     if len(nome) > 120:
@@ -43,7 +41,6 @@ def inserir_cliente(nome, nif, telefone, data_aprovacao, id_utilizador):
 
         return resultado[0]
 
-
 def atualizar_cliente(id, nome, nif, telefone, data_aprovacao, id_utilizador):
     if len(nome) > 120:
         raise ValueError("O nome não pode ultrapassar 120 caracteres.")
@@ -65,6 +62,7 @@ def atualizar_cliente(id, nome, nif, telefone, data_aprovacao, id_utilizador):
             WHERE id = %s
         """, [nome, nif, telefone, data_aprovacao, id_utilizador, id])
 
+        return cursor.rowcount
 
 def eliminar_cliente(id):
     with connection.cursor() as cursor:
@@ -72,3 +70,6 @@ def eliminar_cliente(id):
             DELETE FROM cliente
             WHERE id = %s
         """, [id])
+
+        return cursor.rowcount
+

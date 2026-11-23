@@ -18,12 +18,14 @@ class ApiError(Exception):
 def api(metodo, caminho, request=None, **kwargs):
     """Faz um pedido à API e devolve o JSON (ou None se não houver corpo).
 
-    - Se `request` for dado e houver token na sessão, envia-o no cabeçalho Authorization.
+    - Se `request` for dado, encaminha o cookie da sessão para a API Django.
     - Em caso de erro levanta ApiError(status, detalhe) com a mensagem da API.
     """
     headers = kwargs.pop('headers', {})
-    if request is not None and request.session.get('token'):
-        headers['Authorization'] = f"Bearer {request.session['token']}"
+    if request is not None:
+        cookie = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
+        if cookie:
+            headers['Cookie'] = f'{settings.SESSION_COOKIE_NAME}={cookie}'
 
     url = settings.API_URL.rstrip('/') + caminho
     try:

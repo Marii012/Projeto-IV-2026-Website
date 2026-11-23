@@ -137,3 +137,35 @@ def eliminar_encomenda(id):
             DELETE FROM encomenda
             WHERE id = %s
         """, [id])
+
+
+def criar_encomenda(
+    id_criador, id_cliente, cliente_nome_avulso,
+    morada_avulsa, medico_nome, paciente_identificador,
+    paciente_sexo, paciente_idade, observacoes
+):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT fn_criar_encomenda(
+                %s, %s, %s, %s, %s, %s, %s, %s, %s
+            )
+        """, [
+            id_criador, id_cliente, cliente_nome_avulso,
+            morada_avulsa, medico_nome, paciente_identificador,
+            paciente_sexo, paciente_idade, observacoes
+        ])
+
+        resultado = cursor.fetchone()
+        return resultado[0]
+
+def recusar_encomenda(id_encomenda, id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT fn_recusar_encomenda(%s, %s)
+        """, [id_encomenda, id_utilizador])
+
+def entregar_encomenda(id_encomenda, id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT fn_entregar_encomenda(%s, %s)
+        """, [id_encomenda, id_utilizador])

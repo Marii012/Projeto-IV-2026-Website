@@ -11,9 +11,12 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() == 'true'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'laboratorio',
 ]
 
@@ -38,13 +41,16 @@ TEMPLATES = [{
 }]
 WSGI_APPLICATION = 'projetoIV.wsgi.application'
 
-# O Django NÃO acede à base de dados: quem o faz é a API (pasta api/).
-# Sem base de dados, as sessões ficam num cookie assinado (ver SESSION_ENGINE).
-DATABASES = {}
-
-# Endereço da API (ver api/README). Pode ser alterado com a variável API_URL.
-API_URL = os.environ.get('API_URL', 'http://127.0.0.1:8001')
-API_TIMEOUT = 10  # segundos
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'projeto4teste',
+        'USER': 'admin',
+        'PASSWORD': 'projeto4',
+        'HOST': '100.105.58.22',
+        'PORT': '5432',
+    }
+}
 
 LANGUAGE_CODE = 'pt-pt'
 TIME_ZONE = 'Europe/Lisbon'
@@ -53,3 +59,12 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+API_URL = 'http://127.0.0.1:8000/api'
+API_TIMEOUT = 10
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'laboratorio.api.authentication.AutenticacaoSessao',
+    ],
+}

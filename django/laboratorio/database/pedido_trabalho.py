@@ -105,3 +105,37 @@ def eliminar_pedido_trabalho(id):
             DELETE FROM pedido_trabalho
             WHERE id = %s
         """, [id])
+
+def listar_pedidos_trabalho_cliente(id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT pt.id, pt.e_digital, pt.material_da_clinica,
+                   pt.material_desc, pt.material_qtd, pt.material_obs,
+                   pt.cor, pt.dentes, pt.data_proxima_consulta,
+                   pt.id_encomenda, pt.id_tipo_trabalho,
+                   pt.id_estado, pt.id_material
+            FROM pedido_trabalho pt
+            INNER JOIN encomenda e ON e.id = pt.id_encomenda
+            INNER JOIN cliente c ON c.id = e.id_cliente
+            WHERE c.id_utilizador = %s
+            ORDER BY pt.id
+        """, [id_utilizador])
+
+        return cursor.fetchall()
+
+
+def obter_pedido_trabalho_cliente(id, id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT pt.id, pt.e_digital, pt.material_da_clinica,
+                   pt.material_desc, pt.material_qtd, pt.material_obs,
+                   pt.cor, pt.dentes, pt.data_proxima_consulta,
+                   pt.id_encomenda, pt.id_tipo_trabalho,
+                   pt.id_estado, pt.id_material
+            FROM pedido_trabalho pt
+            INNER JOIN encomenda e ON e.id = pt.id_encomenda
+            INNER JOIN cliente c ON c.id = e.id_cliente
+            WHERE pt.id = %s AND c.id_utilizador = %s
+        """, [id, id_utilizador])
+
+        return cursor.fetchone()
