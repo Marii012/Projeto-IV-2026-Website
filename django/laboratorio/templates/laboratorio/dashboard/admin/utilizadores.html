@@ -1,4 +1,3 @@
-
 {% extends 'laboratorio/dashboard/base_dashboard.html' %}
 {% load static %}
 
@@ -113,29 +112,34 @@
 
                     </div>
 
-                    <p>NIF: {{ utilizador.nif|default:"—" }}</p>
+                    {% if tipo_atual == 'colaboradores' %}
+                        <p>E-mail: {{ utilizador.email }}</p>
+                    {% else %}
+                        <p>NIF: {{ utilizador.nif|default:"—" }}</p>
+                    {% endif %}
 
                 </div>
 
                 <div class="user-actions">
 
-                    <span class="user-jobs">
+                    {% if tipo_atual == 'clientes' %}
 
-                        <strong>{{ utilizador.total_trabalhos|default:"0" }}</strong>
+                        <span class="user-jobs">
 
-                        {% if utilizador.total_trabalhos == 1 %}
-                            trabalho
-                        {% else %}
-                            trabalhos
-                        {% endif %}
+                            <strong>{{ utilizador.total_trabalhos|default:"0" }}</strong>
 
-                    </span>
+                            {% if utilizador.total_trabalhos == 1 %}
+                                trabalho
+                            {% else %}
+                                trabalhos
+                            {% endif %}
 
-                    <a
-                        href="{% url 'utilizadores_admin' %}?tipo={{ tipo_atual }}&editar={{ utilizador.id }}"
-                        class="user-edit-btn"
-                        aria-label="Editar {{ utilizador.nome }}"
-                        title="Editar utilizador">
+                        </span>
+
+                    {% endif %}
+
+                    <a href="{% url 'utilizadores_admin' %}?tipo={{ tipo_atual }}&editar={{ utilizador.id }}"
+                       class="user-edit-btn" aria-label="Editar {{ utilizador.nome }}" title="Editar utilizador">
 
                         <span aria-hidden="true">✎</span>
 
