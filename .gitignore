@@ -1,7 +1,7 @@
-#Python
-pycache/
-.py[cod]
-$py.class
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
 
 #Virtual Environment
 venv/

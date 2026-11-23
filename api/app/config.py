@@ -25,11 +25,9 @@ DB_CONFIG = {
     "port": os.environ.get("DB_PORT", "5432"),
 }
 
-JWT_SECRET = os.environ.get(
-    "JWT_SECRET", "dev-only-change-this-secret-key-0123456789abcdef"
-)
+JWT_SECRET = _obrigatoria("JWT_SECRET")
 JWT_ALGORITMO = "HS256"
-JWT_EXPIRA_MINUTOS = int(os.environ.get("JWT_EXPIRA_MINUTOS", "480"))
+JWT_EXPIRA_MINUTOS = int(os.environ.get("JWT_EXPIRA_MINUTOS", "30"))
 
 # Ids fixos usados pela lógica de negócio (tabelas estado / tipo_utilizador).
 TIPO_ADMIN = 1
