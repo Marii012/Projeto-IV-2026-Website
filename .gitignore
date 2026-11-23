@@ -10,3 +10,7 @@ venv/
 # Django
 db.sqlite3
 media/
+# API
+api/.env
+api/venv/
+.env

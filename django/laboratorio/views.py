@@ -1,15 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth.hashers import check_password
 from django.shortcuts import render, redirect
-from django.db import connection, transaction, IntegrityError
 
-from laboratorio.database.utilizador import (
-    obter_utilizador_por_email,
-    inserir_utilizador
+from laboratorio.permissoes import (
+    DASHBOARD_POR_TIPO, requer_tipo, sessao_expirada
 )
+from laboratorio.services.api_client import ApiError, api
 
-from laboratorio.database.cliente import inserir_cliente
-from laboratorio.database.morada import inserir_morada
 
 def home(request):
     return render(request, 'laboratorio/public/home.html')
@@ -24,64 +20,32 @@ def entrar(request):
         email = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
 
-        # Validar limite do email
-        if len(email) > 150:
-            messages.error(
-                request,
-                'O email não pode ultrapassar 150 caracteres.'
+        try:
+            resposta = api(
+                'POST', '/auth/login',
+                json={'email': email, 'password': password}
             )
+        except ApiError as erro:
+            messages.error(request, erro.detalhe)
             return render(request, 'laboratorio/auth/login.html')
 
-        utilizador = obter_utilizador_por_email(email)
+        utilizador = resposta['utilizador']
 
-        if utilizador is None:
-            messages.error(
-                request,
-                'Email ou palavra-passe inválidos.'
-            )
-            return render(request, 'laboratorio/auth/login.html')
-
-        # Estrutura devolvida pela consulta SQL:
-        # 0 = id
-        # 1 = nome
-        # 2 = email
-        # 3 = password_hash
-        # 4 = cargo
-        # 5 = data_registo
-        # 6 = id_tipo_utilizador
-        # 7 = id_estado
-
-        password_hash = utilizador[3]
-
-        if not check_password(password, password_hash):
-            messages.error(
-                request,
-                'Email ou palavra-passe inválidos.'
-            )
-            return render(request, 'laboratorio/auth/login.html')
-
-        # Guardar dados do utilizador na sessão
-        request.session['utilizador_id'] = utilizador[0]
-        request.session['utilizador_nome'] = utilizador[1]
-        request.session['utilizador_email'] = utilizador[2]
-        request.session['tipo_utilizador_id'] = utilizador[6]
+        # Guardar na sessão o token da API e os dados do utilizador
+        request.session['token'] = resposta['access_token']
+        request.session['utilizador_id'] = utilizador['id']
+        request.session['utilizador_nome'] = utilizador['nome']
+        request.session['utilizador_email'] = utilizador['email']
+        request.session['tipo_utilizador_id'] = utilizador['id_tipo_utilizador']
 
         # Encaminhar conforme o tipo de utilizador
-        tipo = utilizador[6]
+        destino = DASHBOARD_POR_TIPO.get(utilizador['id_tipo_utilizador'])
 
-        if tipo == 1:
-            return redirect('dashboard_admin')
+        if destino:
+            return redirect(destino)
 
-        elif tipo == 2:
-            return redirect('dashboard_colaborador')
-
-        elif tipo == 3:
-            return redirect('dashboard_cliente')
-
-        messages.error(
-            request,
-            'Tipo de utilizador não reconhecido.'
-        )
+        request.session.flush()
+        messages.error(request, 'Tipo de utilizador não reconhecido.')
         return render(request, 'laboratorio/auth/login.html')
 
     return render(request, 'laboratorio/auth/login.html')
@@ -93,73 +57,26 @@ def registo(request):
 
     if request.method == 'POST':
 
-        nome = request.POST.get('nome', '').strip()
-        email = request.POST.get('email', '').strip()
-        telefone = request.POST.get('telefone', '').strip()
-        nif = request.POST.get('nif', '').strip()
-
-        password = request.POST.get('password', '')
-        confirmar_password = request.POST.get('confirmar_password', '')
-
         moradas = [
             morada.strip()
             for morada in request.POST.getlist('morada[]')
             if morada.strip()
         ]
 
+        # As validações e a gravação (utilizador + cliente + moradas,
+        # numa só transação) são feitas pela API.
+        dados = {
+            'nome': request.POST.get('nome', '').strip(),
+            'email': request.POST.get('email', '').strip(),
+            'telefone': request.POST.get('telefone', '').strip(),
+            'nif': request.POST.get('nif', '').strip(),
+            'password': request.POST.get('password', ''),
+            'confirmar_password': request.POST.get('confirmar_password', ''),
+            'moradas': moradas,
+        }
+
         try:
-
-            if not nome or not email or not telefone or not nif:
-                raise ValueError('Preenche todos os campos obrigatórios.')
-            if len(email) > 150:
-                raise ValueError('O email não pode ultrapassar 150 caracteres.')
-            
-            if len(telefone) > 20:
-                raise ValueError('O telefone não pode ultrapassar 20 algarismos.')
-
-            if not password or not confirmar_password:
-                raise ValueError('Preenche os campos da palavra-passe.')
-
-            if password != confirmar_password:
-                raise ValueError('As palavras-passe não coincidem.')
-
-            if len(password) < 8:
-                raise ValueError('A palavra-passe deve ter pelo menos 8 caracteres.')
-
-            if not nif.isdigit() or len(nif) != 9:
-                raise ValueError('O NIF deve conter exatamente 9 algarismos.')
-
-            if not moradas:
-                raise ValueError('Adiciona pelo menos uma morada.')
-
-            if len(moradas) > 4:
-                raise ValueError('Podes adicionar no máximo 4 moradas.')
-
-            with transaction.atomic():
-
-                id_utilizador = inserir_utilizador(
-                    nome=nome,
-                    email=email,
-                    password=password,
-                    cargo=None,
-                    id_tipo_utilizador=3,
-                    id_estado=1
-                )
-
-                id_cliente = inserir_cliente(
-                    nome=nome,
-                    nif=nif,
-                    telefone=telefone,
-                    data_aprovacao=None,
-                    id_utilizador=id_utilizador
-                )
-
-                for morada in moradas:
-                    inserir_morada(
-                        nome_clinica=nome,
-                        morada=morada,
-                        id_cliente=id_cliente
-                    )
+            api('POST', '/auth/registo', json=dados)
 
             messages.success(
                 request,
@@ -168,19 +85,8 @@ def registo(request):
 
             return redirect('entrar')
 
-        except IntegrityError:
-            erro_registo = (
-                'O email ou NIF introduzido já está associado a outra conta.'
-            )
-
-        except ValueError as erro:
-            erro_registo = str(erro)
-
-        except Exception as erro:
-            print('ERRO NO REGISTO:', repr(erro))
-            erro_registo = (
-                'Ocorreu um erro ao efetuar o registo. Tenta novamente.'
-            )
+        except ApiError as erro:
+            erro_registo = erro.detalhe
 
     return render(
         request,
@@ -193,6 +99,7 @@ def registo(request):
     )
 
 
+@requer_tipo(1)
 def dashboard_admin(request):
     return render(
         request,
@@ -200,6 +107,7 @@ def dashboard_admin(request):
     )
 
 
+@requer_tipo(2)
 def dashboard_colaborador(request):
     return render(
         request,
@@ -207,30 +115,28 @@ def dashboard_colaborador(request):
     )
 
 
+@requer_tipo(3)
 def dashboard_cliente(request):
     return render(
         request,
         'laboratorio/dashboard/cliente/dashboard_cliente.html'
     )
 
-def utilizadores_admin(request):
-    return render(
-        request,
-        'laboratorio/dashboard/admin/utilizadores.html'
-    )
 
-
+@requer_tipo(1)
 def encomendas_admin(request):
     return render(
         request,
         'laboratorio/dashboard/admin/encomendas.html'
     )
 
+
 def logout(request):
     request.session.flush()
     return redirect('entrar')
 
 
+@requer_tipo(1)
 def utilizadores_admin(request):
 
     tipo_atual = request.GET.get('tipo', 'clientes')
@@ -247,267 +153,71 @@ def utilizadores_admin(request):
     if request.method == 'POST':
 
         tipo = request.POST.get('tipo_utilizador', '').strip()
-        nome = request.POST.get('nome', '').strip()
-        email = request.POST.get('email', '').strip()
 
         dados_formulario = {
-            'nome': nome,
-            'email': email,
+            'nome': request.POST.get('nome', '').strip(),
+            'email': request.POST.get('email', '').strip(),
             'telefone': request.POST.get('telefone', '').strip(),
             'nif': request.POST.get('nif', '').strip(),
             'morada': request.POST.get('morada', '').strip(),
         }
 
         if tipo not in ('cliente', 'colaborador'):
-
             messages.error(request, 'Tipo de utilizador inválido.')
             return redirect('utilizadores_admin')
 
         abrir_modal = tipo
-
-        if tipo == 'cliente':
-            tipo_atual = 'clientes'
-            id_tipo_utilizador = 3
-        else:
-            tipo_atual = 'colaboradores'
-            id_tipo_utilizador = 2
-
-        # Estado ativo
-        id_estado = 12
+        tipo_atual = 'clientes' if tipo == 'cliente' else 'colaboradores'
 
         try:
-
-            # Validar campos obrigatórios
-            if not nome or not email:
-                raise ValueError(
-                    'Preenche todos os campos obrigatórios.'
-                )
-
-            # Validar dados do cliente
-            if tipo == 'cliente':
-
-                nif = dados_formulario['nif']
-                telefone = dados_formulario['telefone']
-                morada = dados_formulario['morada']
-
-                if not nif or not telefone or not morada:
-                    raise ValueError(
-                        'Preenche o NIF, telefone e morada.'
-                    )
-
-                if not nif.isdigit():
-                    raise ValueError('O NIF só pode conter algarismos.')
-                
-                if len(nif) != 9:
-                    raise ValueError('O NIF deve conter exatamente 9 algarismos.')
-                
-                if not telefone.isdigit():
-                    raise ValueError('O telefone só pode conter algarismos.')
-                
-                if len(telefone) > 20:
-                    raise ValueError('O telefone não pode ultrapassar 20 algarismos.')
-
-            # Criar registos na base de dados
-            with transaction.atomic():
-
-                id_utilizador = inserir_utilizador(
-                    nome=nome,
-                    email=email,
-                    password=None,
-                    cargo=None,
-                    id_tipo_utilizador=id_tipo_utilizador,
-                    id_estado=id_estado
-                )
-
-                # Criar cliente e morada
-                if tipo == 'cliente':
-
-                    id_cliente = inserir_cliente(
-                        id_utilizador=id_utilizador,
-                        nome=nome,
-                        nif=nif,
-                        telefone=telefone
-                    )
-
-                    inserir_morada(
-                        id_cliente=id_cliente,
-                        nome_clinica=nome,
-                        morada=morada
-                    )
-
-            # Sucesso
-            messages.success(
-                request,
-                'Utilizador criado com sucesso!'
+            # A API valida os dados e cria utilizador (+ cliente e morada)
+            # numa só transação.
+            api(
+                'POST', '/utilizadores/admin', request,
+                json={'tipo': tipo, **dados_formulario}
             )
+
+            messages.success(request, 'Utilizador criado com sucesso!')
 
             return redirect(
                 f'/dashboard/admin/utilizadores/?tipo={tipo_atual}'
             )
 
-        # ==========================================
-        # TRATAMENTO DE ERROS DA BASE DE DADOS
-        # ==========================================
-
-        except IntegrityError as erro:
-
-            print("ERRO DE BASE DE DADOS:", repr(erro))
-
-            erro_bd = str(erro)
-
-            if 'utilizador_email_key' in erro_bd:
-
-                erro_formulario = (
-                    'O e-mail introduzido já está associado '
-                    'a outra conta. Escolhe outro e-mail.'
-                )
-
-            elif 'cliente_nif_key' in erro_bd:
-
-                erro_formulario = (
-                    'O NIF introduzido já está associado '
-                    'a outro cliente.'
-                )
-
-            elif 'cliente_id_utilizador_key' in erro_bd:
-
-                erro_formulario = (
-                    'Este utilizador já tem um registo de cliente.'
-                )
-
-            elif 'utilizador' in erro_bd and 'unique' in erro_bd.lower():
-
-                erro_formulario = (
-                    'Já existe uma conta com estes dados.'
-                )
-
-            else:
-
-                erro_formulario = (
-                    'Não foi possível guardar os dados. '
-                    'Verifica os campos e tenta novamente.'
-                )
-
-        # ==========================================
-        # ERROS DE VALIDAÇÃO
-        # ==========================================
-
-        except ValueError as erro:
-
-            erro_formulario = str(erro)
-
-        # ==========================================
-        # OUTROS ERROS
-        # ==========================================
-
-        except Exception as erro:
-
-            print("ERRO INESPERADO:", repr(erro))
-
-            erro_formulario = (
-                'Ocorreu um problema ao criar a conta. '
-                'Tenta novamente.'
-            )
+        except ApiError as erro:
+            if erro.status == 401:
+                return sessao_expirada(request)
+            erro_formulario = erro.detalhe
 
     # ==========================================
-    # DEFINIR UTILIZADORES A LISTAR
+    # CONSULTAR UTILIZADORES (via API)
     # ==========================================
 
-    if tipo_atual == 'colaboradores':
-        id_tipo = 2
-    else:
-        tipo_atual = 'clientes'
-        id_tipo = 3
+    painel = {
+        'tipo': 'colaboradores' if tipo_atual == 'colaboradores' else 'clientes',
+        'total_clientes': 0,
+        'total_colaboradores': 0,
+        'utilizadores': [],
+    }
 
-    # ==========================================
-    # CONSULTAR BASE DE DADOS
-    # ==========================================
-
-    with connection.cursor() as cursor:
-
-        # Total de clientes
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM utilizador
-            WHERE id_tipo_utilizador = 3
-        """)
-
-        total_clientes = cursor.fetchone()[0]
-
-        # Total de colaboradores
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM utilizador
-            WHERE id_tipo_utilizador = 2
-        """)
-
-        total_colaboradores = cursor.fetchone()[0]
-
-        # Consultar utilizadores
-        sql = """
-            SELECT
-                u.id,
-                u.nome,
-                u.email,
-                e.descricao AS estado,
-                c.nif,
-                0 AS total_trabalhos
-            FROM utilizador u
-            LEFT JOIN cliente c
-                ON c.id_utilizador = u.id
-            LEFT JOIN estado e
-                ON e.id = u.id_estado
-            WHERE u.id_tipo_utilizador = %s
-        """
-
-        parametros = [id_tipo]
-
-        # Pesquisa por nome, email ou NIF
-        if pesquisa:
-
-            sql += """
-                AND (
-                    u.nome ILIKE %s
-                    OR u.email ILIKE %s
-                    OR CAST(c.nif AS TEXT) ILIKE %s
-                )
-            """
-
-            pesquisa_sql = f'%{pesquisa}%'
-
-            parametros.extend([
-                pesquisa_sql,
-                pesquisa_sql,
-                pesquisa_sql
-            ])
-
-        sql += " ORDER BY u.nome ASC"
-
-        cursor.execute(sql, parametros)
-
-        colunas = [
-            coluna[0]
-            for coluna in cursor.description
-        ]
-
-        utilizadores = [
-            dict(zip(colunas, linha))
-            for linha in cursor.fetchall()
-        ]
-
-    # ==========================================
-    # APRESENTAR PÁGINA
-    # ==========================================
+    try:
+        painel = api(
+            'GET', '/utilizadores/painel', request,
+            params={'tipo': tipo_atual, 'pesquisa': pesquisa}
+        )
+    except ApiError as erro:
+        if erro.status == 401:
+            return sessao_expirada(request)
+        messages.error(request, erro.detalhe)
 
     return render(
         request,
         'laboratorio/dashboard/admin/utilizadores.html',
         {
-            'tipo_atual': tipo_atual,
+            'tipo_atual': painel['tipo'],
             'pesquisa': pesquisa,
-            'utilizadores': utilizadores,
-            'total_clientes': total_clientes,
-            'total_colaboradores': total_colaboradores,
+            'utilizadores': painel['utilizadores'],
+            'total_clientes': painel['total_clientes'],
+            'total_colaboradores': painel['total_colaboradores'],
 
             # Dados dos formulários
             'erro_formulario': erro_formulario,
