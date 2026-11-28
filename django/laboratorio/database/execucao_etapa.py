@@ -65,3 +65,25 @@ def eliminar_execucao_etapa(id):
             DELETE FROM execucao_etapa
             WHERE id = %s
         """, [id])
+
+
+def encaminhar_etapa(
+    id_execucao, id_utilizador, id_proxima_etapa,
+    id_proximo_colaborador, nota, nota_visivel_cliente
+):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            CALL sp_encaminhar_etapa(%s, %s, %s, %s, %s, %s, %s)
+        """, [
+            id_execucao,
+            id_utilizador,
+            id_proxima_etapa,
+            id_proximo_colaborador,
+            nota,
+            nota_visivel_cliente,
+            None
+        ])
+
+        resultado = cursor.fetchone()
+        return resultado[0]
+

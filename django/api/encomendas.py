@@ -11,7 +11,8 @@ from laboratorio.database.encomenda import (
     obter_encomenda,
     criar_encomenda,
     recusar_encomenda,
-    entregar_encomenda
+    entregar_encomenda,
+    autorizar_encomenda
 )
 
 
@@ -163,3 +164,25 @@ def entregar(request, id):
         return Response({
             'erro': 'Não foi possível entregar a encomenda. Verifica se existe e se está concluída.'
         }, status=400)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def autorizar(request, id):
+    if request.user.tipo_utilizador != 1:
+        return Response(
+            {'erro': 'Apenas o administrador pode autorizar encomendas.'},
+            status=403
+        )
+
+    try:
+        autorizar_encomenda(id, request.user.id)
+
+        return Response({
+            'mensagem': 'Encomenda autorizada com sucesso.'
+        })
+
+    except ValueError as erro:
+        return Response({'erro': str(erro)}, status=400)
+
+    except Exception as erro:
+        return Response({'erro': str(erro)}, status=400)

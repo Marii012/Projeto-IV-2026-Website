@@ -1,4 +1,4 @@
-from django.db import connection
+from django.db import connection, transaction
 
 
 def listar_encomendas():
@@ -130,14 +130,12 @@ def atualizar_encomenda(
             id_encomenda_origem, id
         ])
 
-
 def eliminar_encomenda(id):
     with connection.cursor() as cursor:
         cursor.execute("""
             DELETE FROM encomenda
             WHERE id = %s
         """, [id])
-
 
 def criar_encomenda(
     id_criador, id_cliente, cliente_nome_avulso,
@@ -146,13 +144,20 @@ def criar_encomenda(
 ):
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT fn_criar_encomenda(
-                %s, %s, %s, %s, %s, %s, %s, %s, %s
+            CALL sp_criar_encomenda(
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
             )
         """, [
-            id_criador, id_cliente, cliente_nome_avulso,
-            morada_avulsa, medico_nome, paciente_identificador,
-            paciente_sexo, paciente_idade, observacoes
+            id_criador,
+            id_cliente,
+            cliente_nome_avulso,
+            morada_avulsa,
+            medico_nome,
+            paciente_identificador,
+            paciente_sexo,
+            paciente_idade,
+            observacoes,
+            None
         ])
 
         resultado = cursor.fetchone()
@@ -169,3 +174,38 @@ def entregar_encomenda(id_encomenda, id_utilizador):
         cursor.execute("""
             SELECT fn_entregar_encomenda(%s, %s)
         """, [id_encomenda, id_utilizador])
+
+def autorizar_encomenda(id_encomenda, id_utilizador):
+
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT id_estado
+                FROM encomenda
+                WHERE id = %s
+                FOR UPDATE
+            """, [id_encomenda])
+
+            encomenda = cursor.fetchone()
+
+            if encomenda is None:
+                raise ValueError("Encomenda não encontrada.")
+
+            if encomenda[0] != 4:
+                raise ValueError("A encomenda não está em avaliação.")
+
+            cursor.execute("""
+                UPDATE pedido_trabalho
+                SET id_estado = 5
+                WHERE id_encomenda = %s
+                  AND id_estado = 4
+            """, [id_encomenda])
+
+            cursor.execute("""
+                UPDATE encomenda
+                SET data_aceitacao = NOW(),
+                    id_aceite_por = %s
+                WHERE id = %s
+            """, [id_utilizador, id_encomenda])
+

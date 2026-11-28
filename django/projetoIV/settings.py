@@ -65,6 +65,6 @@ API_TIMEOUT = 10
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'laboratorio.api.authentication.AutenticacaoSessao',
+        'api.authentication.AutenticacaoSessao',
     ],
 }

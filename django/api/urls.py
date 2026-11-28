@@ -3,6 +3,10 @@ from . import utilizadores
 from . import clientes
 from . import encomendas
 from . import moradas
+from . import pedidos_trabalhos
+from . import solicitacoes
+from . import execucoes_etapa
+
 urlpatterns = [
     # Utilizadores
     path('utilizadores/', utilizadores.listar, name='api_utilizadores'),
@@ -32,6 +36,24 @@ urlpatterns = [
     path('encomendas/<int:id>/recusar/', encomendas.recusar, name='api_recusar_encomenda'),
     path('encomendas/<int:id>/entregar/', encomendas.entregar, name='api_entregar_encomenda'),
 
-    #Pedido de Trabalho
-    
+    # Pedido de Trabalho
+    path('trabalhos/', pedidos_trabalhos.listar, name='api_trabalhos'),
+    path('trabalhos/<int:id>/', pedidos_trabalhos.obter, name='api_obter_trabalho'),
+    path('trabalhos/<int:id>/assumir/', pedidos_trabalhos.assumir, name='api_assumir_etapa'),
+    path('encomendas/<int:id>/autorizar/', encomendas.autorizar, name='api_autorizar_encomenda'),
+    path('trabalhos/<int:id>/espera/', pedidos_trabalhos.espera, name='api_trabalho_espera'),
+    path('trabalhos/<int:id>/prova/', pedidos_trabalhos.prova, name='api_trabalho_prova'),
+    path('execucoes/<int:id>/finalizar/', pedidos_trabalhos.finalizar, name='api_finalizar_etapa'),
+    path('trabalhos/<int:id>/concluir/', pedidos_trabalhos.concluir, name='api_concluir_trabalho'),
+
+    # Solicitações
+    path('solicitacoes/', solicitacoes.listar, name='api_solicitacoes'),
+    path('solicitacoes/<int:id>/', solicitacoes.obter, name='api_obter_solicitacao'),
+    path('solicitacoes/criar/', solicitacoes.criar, name='api_criar_solicitacao'),
+    path('solicitacoes/<int:id>/decidir/', solicitacoes.decidir, name='api_decidir_solicitacao'),
+
+    # Execuções de Etapas
+    path('execucoes/', execucoes_etapa.listar, name='api_execucoes'),
+    path('execucoes/<int:id>/', execucoes_etapa.obter, name='api_obter_execucao'),
+    path('execucoes/<int:id>/encaminhar/', execucoes_etapa.encaminhar, name='api_encaminhar_etapa'),
 ]

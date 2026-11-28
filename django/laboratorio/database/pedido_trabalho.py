@@ -139,3 +139,41 @@ def obter_pedido_trabalho_cliente(id, id_utilizador):
         """, [id, id_utilizador])
 
         return cursor.fetchone()
+
+def assumir_etapa(id_trabalho, id_etapa, id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            CALL sp_assumir_etapa(%s, %s, %s, %s)
+        """, [id_trabalho, id_etapa, id_utilizador, None])
+
+        resultado = cursor.fetchone()
+        return resultado[0]
+
+    return cursor.fetchone()
+
+def colocar_em_espera(id_trabalho, motivo, id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT fn_colocar_em_espera(%s, %s, %s)
+        """, [id_trabalho, id_utilizador, motivo])
+
+        resultado = cursor.fetchone()
+        return resultado[0]
+
+def colocar_em_prova(id_trabalho, id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            CALL sp_colocar_em_prova(%s, %s)
+        """, [id_trabalho, id_utilizador])
+
+def finalizar_etapa(id_execucao, id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            CALL sp_finalizar_etapa(%s, %s)
+        """, [id_execucao, id_utilizador])
+
+def concluir_trabalho(id_trabalho, id_utilizador):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            CALL sp_concluir_trabalho(%s, %s)
+        """, [id_trabalho, id_utilizador])

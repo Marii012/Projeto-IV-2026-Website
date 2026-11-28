@@ -3,14 +3,17 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.http import Http404
 
-from api.permissions import AdministradorOuColaborador
 from laboratorio.database.pedido_trabalho import (
     listar_pedidos_trabalho,
     obter_pedido_trabalho,
     listar_pedidos_trabalho_cliente,
-    obter_pedido_trabalho_cliente
+    obter_pedido_trabalho_cliente,
+    assumir_etapa,
+    colocar_em_espera,
+    colocar_em_prova,
+    finalizar_etapa,
+    concluir_trabalho 
 )
-
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -70,3 +73,110 @@ def obter(request, id):
     }
 
     return Response(resultado)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def assumir(request, id):
+    if request.user.tipo_utilizador not in [1, 2]:
+        return Response(
+            {'erro': 'Não tens permissões para assumir etapas.'},
+            status=403
+        )
+
+    id_etapa = request.data.get('id_etapa')
+
+    if not id_etapa:
+        return Response(
+            {'erro': 'É necessário indicar a etapa.'},
+            status=400
+        )
+
+    try:
+        id_execucao = assumir_etapa(
+            id,
+            id_etapa,
+            request.user.id
+        )
+
+        return Response({
+            'mensagem': 'Etapa assumida com sucesso.',
+            'id_execucao': id_execucao
+        })
+
+    except Exception as erro:
+        return Response({'erro': str(erro)}, status=400)
+
+    return Response(resultado)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def espera(request, id):
+
+    if request.user.tipo_utilizador not in [1, 2]:
+        return Response(
+            {'erro': 'Não tens permissões para colocar trabalhos em espera.'},
+            status=403
+        )
+
+    motivo = request.data.get('motivo')
+
+    if not motivo:
+        return Response(
+            {'erro': 'É necessário indicar o motivo da espera.'},
+            status=400
+        )
+
+    try:
+        colocar_em_espera(id, motivo, request.user.id)
+
+        return Response({
+            'mensagem': 'Trabalho colocado em espera com sucesso.'
+        })
+
+    except Exception as erro:
+        return Response({'erro': str(erro)}, status=400)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def prova(request, id):
+    if request.user.tipo_utilizador not in [1, 2]:
+        return Response(
+            {'erro': 'Não tens permissões para realizar esta operação.'},
+            status=403
+        )
+
+    try:
+        colocar_em_prova(id, request.user.id)
+        return Response({'mensagem': 'Trabalho colocado em prova com sucesso.'})
+    except Exception as erro:
+        return Response({'erro': str(erro)}, status=400)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def finalizar(request, id):
+    if request.user.tipo_utilizador not in [1, 2]:
+        return Response(
+            {'erro': 'Não tens permissões para realizar esta operação.'},
+            status=403
+        )
+
+    try:
+        finalizar_etapa(id, request.user.id)
+        return Response({'mensagem': 'Etapa finalizada com sucesso.'})
+    except Exception as erro:
+        return Response({'erro': str(erro)}, status=400)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def concluir(request, id):
+    if request.user.tipo_utilizador not in [1, 2]:
+        return Response(
+            {'erro': 'Não tens permissões para realizar esta operação.'},
+            status=403
+        )
+
+    try:
+        concluir_trabalho(id, request.user.id)
+        return Response({'mensagem': 'Trabalho concluído com sucesso.'})
+    except Exception as erro:
+        return Response({'erro': str(erro)}, status=400)

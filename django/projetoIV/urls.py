@@ -15,5 +15,5 @@ urlpatterns = [
     path('dashboard/admin/encomendas/', views.encomendas_admin, name='encomendas_admin'),
 
     path('logout/', views.logout, name='logout'),
-    path('api/', include('laboratorio.api.urls')),
+    path('api/', include('api.urls')),
 ]
